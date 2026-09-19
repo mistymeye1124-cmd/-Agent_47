@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal Portfolio & AI Assistant - Biography, skills matrix, learning roadmap, public resources, channels, and VIP community.">
+  <meta name="author" content="Agent 47">
+  <meta name="theme-color" content="#070a13">
+  
+  <title>Agent 47 | Elite Operative & Software Architecture</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Instant Theme Initializer (Prevents Flash) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('app_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css?v=2.6">
+</head>
+<body>
+
+  <!-- Cyber Matrix Rain Canvas Background -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Ambient Gradient Glow Orbs in Background -->
+  <div class="bg-glow-container">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo" id="brand-logo-link">
+        <div class="brand-avatar-mini">
+          <i class="fas fa-terminal"></i>
+        </div>
+        <div class="brand-text">
+          <span id="brand-name">Agent 47</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#learning" class="nav-link">Learning</a></li>
+        <li><a href="#resources" class="nav-link">Resources</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#channels" class="nav-link">Channels</a></li>
+        <li><a href="#vip" class="nav-link" style="color: var(--gold); font-weight: 600;"><i class="fas fa-crown"></i> VIP</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Light / Dark Theme Switcher Button -->
+        <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light / Dark Mode">
+          <i class="fas fa-moon" id="theme-toggle-icon"></i>
+        </button>
+
+        <button class="btn-ai-trigger" id="nav-ai-trigger" title="Open AI Digital Twin Chat">
+          <i class="fas fa-wand-magic-sparkles sparkle-icon"></i>
+          <span>Ask My AI</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==============================================
+       SECTION 1: HERO & BIO (AMI KE)
+       ============================================== -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-grid">
+      
+      <!-- Hero Content Column -->
+      <div class="hero-content">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span id="status-text">Open to exciting opportunities</span>
+        </div>
+
+        <h1 class="hero-title">
+          Hi, I'm <span class="hero-name-gradient" id="hero-name">Agent 47</span>
+        </h1>
+
+        <div class="hero-roles">
+          <span>I operate as an</span>
+          <span class="typing-text" id="typing-role"></span>
+        </div>
+
+        <p class="hero-description" id="hero-description">
+          Elite software operative and systems architect turning mission-critical problems into indestructible, high-performance architecture. Precision, clean code, and zero compromises.
+        </p>
+
+        <div class="hero-cta-group">
+          <button class="btn-primary" id="hero-ai-trigger">
+            <i class="fas fa-comments"></i>
+            <span>Chat with My AI</span>
+          </button>
+          <a href="#resources" class="btn-secondary">
+            <i class="fas fa-download"></i>
+            <span>Free Resources</span>
+          </a>
+        </div>
+
+        <div class="hero-socials" id="hero-socials">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Hero Visual Card Column -->
+      <div class="hero-card-container">
+        <div class="glass-profile-card">
+          <div class="profile-avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Agent 47 Avatar" class="profile-avatar-img" id="card-avatar">
+            <div class="avatar-badge-live">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+          </div>
+
+          <div class="profile-info">
+            <h3 id="card-name">Agent 47</h3>
+            <p id="card-title">Elite Software Operative & Security Architect</p>
+          </div>
+
+          <div class="profile-metrics-grid" id="profile-stats-grid">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 2: ABOUT STORY (AMI KE)
+       ============================================== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Biography</span>
+        <h2 class="section-title">Who I Am & Behind the Code</h2>
+        <p class="section-subtitle">Get to know my journey, philosophy, and what motivates my work.</p>
+      </div>
+
+      <div class="about-card">
+        <div id="about-story-content">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="about-highlight-box">
+          <div class="highlight-item">
+            <div class="highlight-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="highlight-text">
+              <h4>Performance First</h4>
+              <span>Fast & optimized software</span>
+            </div>
+          </div>
+
+          <div class="highlight-item">
+            <div class="highlight-icon">
+              <i class="fas fa-cubes"></i>
+            </div>
+            <div class="highlight-text">
+              <h4>Modular Architecture</h4>
+              <span>Maintainable, clean code</span>
+            </div>
+          </div>
+
+          <div class="highlight-item">
+            <div class="highlight-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="highlight-text">
+              <h4>Community Driven</h4>
+              <span>Uplifting developers & learners</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 3: SKILLS MATRIX (KI KI PARI)
+       ============================================== -->
+  <section class="section" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Capabilities</span>
+        <h2 class="section-title">What I Can Do (Skills Matrix)</h2>
+        <p class="section-subtitle">Filter by category or search for specific technologies and competencies.</p>
+      </div>
+
+      <!-- Controls: Category Tabs & Real-time Search -->
+      <div class="skills-controls">
+        <div class="skills-filter-tabs">
+          <button class="filter-tab active" data-category="all">All Skills</button>
+          <button class="filter-tab" data-category="frontend">Frontend</button>
+          <button class="filter-tab" data-category="backend">Backend & DB</button>
+          <button class="filter-tab" data-category="tools">Tools & DevOps</button>
+          <button class="filter-tab" data-category="soft">Soft Skills</button>
+        </div>
+
+        <div class="skills-search-box">
+          <i class="fas fa-search skills-search-icon"></i>
+          <input type="text" id="skills-search" class="skills-search-input" placeholder="Search skill or level..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Dynamic Skills Grid -->
+      <div class="skills-grid" id="skills-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 4: CURRENTLY LEARNING (KI KI SIKI)
+       ============================================== -->
+  <section class="section" id="learning">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Continuous Growth</span>
+        <h2 class="section-title">What I Am Learning (Tech Roadmap)</h2>
+        <p class="section-subtitle">Real-time progress on new technologies, frameworks, and architectural paradigms I'm actively exploring.</p>
+      </div>
+
+      <div class="learning-grid" id="learning-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 5: RESOURCES & DOWNLOADS HUB
+       ============================================== -->
+  <section class="section" id="resources">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Knowledge Hub</span>
+        <h2 class="section-title">Free Resources & Downloads</h2>
+        <p class="section-subtitle">Curated guides, roadmaps, cheat sheets, and starter kits to accelerate your learning.</p>
+      </div>
+
+      <div class="resources-controls">
+        <div class="skills-filter-tabs" id="resources-filter-tabs">
+          <button class="filter-tab active" data-res-cat="all">All Files</button>
+          <button class="filter-tab" data-res-cat="Roadmaps">Roadmaps</button>
+          <button class="filter-tab" data-res-cat="Cheat Sheets">Cheat Sheets</button>
+          <button class="filter-tab" data-res-cat="Templates">Templates</button>
+          <button class="filter-tab" data-res-cat="Interview Prep">Interview Prep</button>
+        </div>
+
+        <div class="skills-search-box">
+          <i class="fas fa-search skills-search-icon"></i>
+          <input type="text" id="resources-search" class="skills-search-input" placeholder="Search resources..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="resources-grid" id="resources-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 6: FEATURED PROJECTS
+       ============================================== -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Portfolio</span>
+        <h2 class="section-title">Featured Creations</h2>
+        <p class="section-subtitle">A collection of software projects, tools, and digital solutions I've crafted.</p>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 7: CHANNELS & COMMUNITIES (KON CHANNEL ACE)
+       ============================================== -->
+  <section class="section" id="channels">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Communities</span>
+        <h2 class="section-title">My Channels & Hubs</h2>
+        <p class="section-subtitle">Join my official platforms for tutorials, discussions, free alerts, and code releases.</p>
+      </div>
+
+      <div class="channels-grid" id="channels-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 8: VIP EXCLUSIVE CLUB (KON VIP ACE)
+       ============================================== -->
+  <section class="section" id="vip">
+    <div class="container">
+      <div class="vip-container-box">
+        <div class="vip-content-grid">
+          <div>
+            <div class="vip-badge-tag" id="vip-badge">
+              <i class="fas fa-crown"></i> Exclusive Access
+            </div>
+            <h2 class="vip-title" id="vip-title">Agent 47 VIP Syndicate</h2>
+            <p class="vip-tagline" id="vip-tagline">Accelerate your career with direct access, private mentoring, and premium toolkits.</p>
+            <p class="vip-description" id="vip-description">
+              A private high-tier syndicate for serious developers and learners who want unfair advantages, 1-on-1 code guidance, and classified blueprints.
+            </p>
+
+            <div class="vip-perks-list" id="vip-perks-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <div class="vip-action-box">
+            <i class="fas fa-gem" style="font-size: 3rem; color: var(--gold);"></i>
+            <div class="vip-price-tag" id="vip-price">Classified / Invite Only</div>
+            <p class="vip-subtext">Strictly limited membership to ensure high-quality mentorship.</p>
+            <a href="#" id="vip-join-btn" target="_blank" rel="noopener noreferrer" class="btn-vip-join">
+              <i class="fab fa-telegram-plane"></i> Join VIP Syndicate
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION 9: CONTACT & SOCIALS
+       ============================================== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-title">Let's Connect & Collaborate</h2>
+        <p class="section-subtitle">Have an opportunity, question, or idea? Reach out directly or send a message.</p>
+      </div>
+
+      <div class="contact-wrapper">
+        <div class="contact-info-col">
+          <h3>Ready to start a conversation?</h3>
+          <p>
+            I'm always eager to collaborate on meaningful projects, open-source initiatives, or high-impact architecture. You can reach out directly via encrypted channels or email!
+          </p>
+
+          <div class="contact-details-list">
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-detail-text">
+                <span>Direct Email</span>
+                <a href="mailto:agent47@agency.net" id="contact-email-val">agent47@agency.net</a>
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-detail-text">
+                <span>Base Location</span>
+                <span id="contact-location-val">Global / Encrypted</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contact-form">
+          <div class="form-group">
+            <label for="form-name" class="form-label">Your Name</label>
+            <input type="text" id="form-name" class="form-input" placeholder="e.g. John Doe" required>
+          </div>
+
+          <div class="form-group">
+            <label for="form-email" class="form-label">Email Address</label>
+            <input type="email" id="form-email" class="form-input" placeholder="john@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="form-message" class="form-label">Message</label>
+            <textarea id="form-message" class="form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+          </div>
+
+          <button type="submit" class="form-submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            <span>Send Message</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="brand-text">
+        <span>Agent 47</span> &copy; 2026. Built with Clean Code & AI.
+      </div>
+      <div class="footer-bottom-row">
+        <a href="#hero" class="nav-link" style="font-size: 0.85rem;">Back to Top <i class="fas fa-arrow-up"></i></a>
+        <!-- Stealth Admin Trigger (Hidden / Private) -->
+        <a href="admin.html" class="stealth-admin-trigger" title="Admin Portal">
+          <i class="fas fa-lock"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating AI Assistant Launcher Button -->
+  <button class="floating-assistant-btn" id="floating-assistant-btn" title="Open AI Assistant" aria-label="Open AI Assistant">
+    <div class="assistant-btn-label">
+      <span class="online-ping"></span>
+      <span>AI Assistant</span>
+    </div>
+    <div class="assistant-btn-pulse"></div>
+    <i class="fas fa-robot" id="floating-btn-icon"></i>
+  </button>
+
+  <!-- Dark Backdrop for Mobile / Outside Click -->
+  <div class="chat-backdrop" id="chat-backdrop"></div>
+
+  <!-- AI Assistant Chat Drawer / Window -->
+  <aside class="chat-drawer" id="chat-drawer" aria-label="AI Assistant Chat">
+    <!-- Dual Bot Mode Switcher -->
+    <div class="chat-bot-selector-bar">
+      <button class="chat-mode-tab active" id="tab-bot-persona" title="Talk to Agent 47's Persona Clone">
+        <i class="fas fa-user-astronaut"></i> <span>BioBot Persona</span>
+      </button>
+      <button class="chat-mode-tab" id="tab-bot-omni" title="General Gemini Intelligence with Voice">
+        <i class="fas fa-brain"></i> <span>Omni AI + Voice</span>
+      </button>
+    </div>
+
+    <div class="chat-header">
+      <div class="chat-bot-identity">
+        <div class="chat-bot-avatar" id="chat-bot-avatar-icon">
+          <i class="fas fa-user-astronaut"></i>
+        </div>
+        <div class="chat-bot-meta">
+          <h4 id="chat-bot-title-text">BioBot &bull; Agent 47 Clone</h4>
+          <span id="bot-status-indicator">Online &bull; Ready to help</span>
+        </div>
+      </div>
+      <button class="chat-close-btn" id="chat-close-btn" title="Close Chat" aria-label="Close Chat">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Message Bubble Stream -->
+    <div class="chat-messages" id="chat-messages">
+      <!-- Bubbles appended dynamically -->
+    </div>
+
+    <!-- Quick Question Chips -->
+    <div class="chat-suggestions" id="chat-suggestions">
+      <!-- Rendered dynamically -->
+    </div>
+
+    <!-- Input Bar with Voice Microphone and TTS Speaker -->
+    <div class="chat-input-bar">
+      <button class="chat-voice-btn" id="chat-mic-btn" title="Click to Speak (Voice Input)">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <input type="text" id="chat-input-field" class="chat-input-field" placeholder="Ask anything..." autocomplete="off">
+      <button class="chat-voice-btn" id="chat-tts-btn" title="Voice Output Toggle (Reads replies aloud)">
+        <i class="fas fa-volume-up"></i>
+      </button>
+      <button class="chat-send-btn" id="chat-send-btn" title="Send Question" aria-label="Send Question">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Application Scripts -->
+  <script src="js/cyber-matrix.js?v=2.6"></script>
+  <script src="js/profile-data.js?v=2.6"></script>
+  <script src="js/app.js?v=2.6"></script>
+  <script src="js/assistant.js?v=2.6"></script>
+</body>
+</html>

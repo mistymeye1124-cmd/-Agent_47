@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 47 | Private Admin Studio</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Instant Theme Initializer (Prevents Flash) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('app_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <!-- Custom Admin Styles -->
+  <link rel="stylesheet" href="css/style.css?v=2.6">
+  <link rel="stylesheet" href="css/admin.css?v=2.6">
+</head>
+<body>
+
+  <!-- PIN LOCK OVERLAY -->
+  <div class="pin-lock-overlay" id="pin-lock-overlay">
+    <div class="pin-box">
+      <div class="pin-lock-icon">
+        <i class="fas fa-fingerprint"></i>
+      </div>
+      <h2 class="pin-title">Private Admin Studio</h2>
+      <p class="pin-subtitle">Enter security passcode to manage all content & AI</p>
+
+      <div class="pin-input-wrap">
+        <input type="password" id="pin-input" class="pin-input" placeholder="••••" maxlength="12" autofocus autocomplete="off">
+      </div>
+
+      <button class="pin-btn" id="pin-submit-btn">
+        <i class="fas fa-unlock"></i> Unlock Dashboard
+      </button>
+      <p class="pin-hint">Default Passcode: <strong>1234</strong> (Can be changed in Settings)</p>
+    </div>
+  </div>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">
+        <i class="fas fa-sliders-h"></i>
+      </div>
+      <div class="sidebar-brand">
+        <h2>Admin Studio</h2>
+        <span>v2.5 &bull; PRIVATE CMS</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-view="view-dashboard">
+        <div class="nav-item-left">
+          <i class="fas fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-bio">
+        <div class="nav-item-left">
+          <i class="fas fa-id-card"></i>
+          <span>Bio & Profile</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-skills">
+        <div class="nav-item-left">
+          <i class="fas fa-code"></i>
+          <span>Skills Matrix</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-learning">
+        <div class="nav-item-left">
+          <i class="fas fa-graduation-cap"></i>
+          <span>Learning Roadmap</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-resources">
+        <div class="nav-item-left">
+          <i class="fas fa-folder-open"></i>
+          <span>Resources Hub</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-projects">
+        <div class="nav-item-left">
+          <i class="fas fa-cubes"></i>
+          <span>Projects</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-channels-vip">
+        <div class="nav-item-left">
+          <i class="fas fa-crown" style="color: var(--gold);"></i>
+          <span>Channels & VIP</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-copilot">
+        <div class="nav-item-left">
+          <i class="fas fa-terminal" style="color: #00ff88;"></i>
+          <span>Master Copilot (Bot 3)</span>
+        </div>
+        <span class="badge-tag" style="font-size: 0.68rem; background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3);">PRIVATE</span>
+      </div>
+
+      <div class="nav-item" data-view="view-ai">
+        <div class="nav-item-left">
+          <i class="fas fa-brain"></i>
+          <span>AI Bot Trainer</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-messages">
+        <div class="nav-item-left">
+          <i class="fas fa-envelope"></i>
+          <span>Messages Inbox</span>
+        </div>
+        <span class="nav-item-badge" id="nav-msg-badge" style="display: none;">0</span>
+      </div>
+
+      <div class="nav-item" data-view="view-settings">
+        <div class="nav-item-left">
+          <i class="fas fa-cog"></i>
+          <span>Gemini & Security</span>
+        </div>
+      </div>
+
+      <div class="nav-item" data-view="view-export">
+        <div class="nav-item-left">
+          <i class="fas fa-download"></i>
+          <span>Backup & Export</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" class="btn-sidebar-link" title="Open Portfolio">
+        <i class="fas fa-external-link-alt"></i>
+        <span>Live Site</span>
+      </a>
+      <button class="btn-lock" id="btn-lock-session" title="Lock Admin Session">
+        <i class="fas fa-lock"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ADMIN MAIN CONTENT -->
+  <main class="admin-main">
+    
+    <!-- Top Header -->
+    <header class="admin-header">
+      <div class="header-title-group">
+        <h1 id="current-view-title">Dashboard Overview</h1>
+        <p id="current-view-desc">Live overview of your personal brand platform</p>
+      </div>
+
+      <div class="header-actions">
+        <button class="theme-toggle-btn" id="admin-theme-toggle" title="Toggle Light / Dark Mode" aria-label="Toggle Light / Dark Mode" style="width: 36px; height: 36px; font-size: 0.95rem;">
+          <i class="fas fa-moon" id="admin-theme-icon"></i>
+        </button>
+        <a href="index.html" target="_blank" class="btn-header btn-header-ghost">
+          <i class="fas fa-eye"></i> View Live Site
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Views Area -->
+    <div class="admin-body">
+
+      <!-- VIEW 1: DASHBOARD OVERVIEW -->
+      <section class="admin-view active" id="view-dashboard">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box icon-blue">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="metric-details">
+              <h3 id="metric-skills-count">0</h3>
+              <p>Active Skills</p>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box icon-purple">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="metric-details">
+              <h3 id="metric-learning-count">0</h3>
+              <p>Roadmap Items</p>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box icon-emerald">
+              <i class="fas fa-file-download"></i>
+            </div>
+            <div class="metric-details">
+              <h3 id="metric-resources-count">0</h3>
+              <p>Public Resources</p>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box icon-amber">
+              <i class="fas fa-inbox"></i>
+            </div>
+            <div class="metric-details">
+              <h3 id="metric-messages-count">0</h3>
+              <p>Form Messages</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Quick Navigation</h3>
+              <p class="admin-card-desc">Jump straight into managing any part of your platform</p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px;">
+              <h4 style="color: #fff; margin-bottom: 6px;"><i class="fas fa-file-alt" style="color: var(--secondary);"></i> Resources Hub</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Upload cheatsheets, PDFs, and code starter boilerplates for your followers.</p>
+              <button class="btn-action btn-primary" onclick="document.querySelector('[data-view=view-resources]').click()">Manage Resources</button>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px;">
+              <h4 style="color: #fff; margin-bottom: 6px;"><i class="fas fa-crown" style="color: var(--gold);"></i> Channels & VIP Club</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Manage community channels and your exclusive VIP circle perks and join links.</p>
+              <button class="btn-action btn-primary" onclick="document.querySelector('[data-view=view-channels-vip]').click()">Manage VIP & Channels</button>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px;">
+              <h4 style="color: #fff; margin-bottom: 6px;"><i class="fas fa-robot" style="color: #38bdf8;"></i> Gemini AI Settings</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Plug in your Google Gemini API Key to enable supercharged AI responses.</p>
+              <button class="btn-action btn-primary" onclick="document.querySelector('[data-view=view-settings]').click()">Configure Gemini</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: BIO & PROFILE -->
+      <section class="admin-view" id="view-bio">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Personal Biography & Information</h3>
+              <p class="admin-card-desc">Your personal narrative, identity, and social links</p>
+            </div>
+          </div>
+
+          <form id="bio-form">
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="bio-name" class="form-control" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Title / Designation</label>
+                <input type="text" id="bio-title" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Typewriter Roles (comma separated)</label>
+                <input type="text" id="bio-roles" class="form-control" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Avatar Image URL</label>
+                <input type="url" id="bio-avatar" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Status Badge Text</label>
+                <input type="text" id="bio-status" class="form-control" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="bio-email" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Location</label>
+              <input type="text" id="bio-location" class="form-control" required>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Hero Short Bio</label>
+              <textarea id="bio-short" class="form-control" rows="2" required></textarea>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Detailed Biography Story</label>
+              <textarea id="bio-story" class="form-control" rows="5" required></textarea>
+            </div>
+
+            <h4 style="font-family: var(--font-heading); margin: 24px 0 16px; color: #fff;">Social Profiles</h4>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">GitHub URL</label>
+                <input type="url" id="social-github" class="form-control">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">LinkedIn URL</label>
+                <input type="url" id="social-linkedin" class="form-control">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Telegram URL</label>
+                <input type="url" id="social-telegram" class="form-control">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">YouTube URL</label>
+                <input type="url" id="social-youtube" class="form-control">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-action btn-primary" style="margin-top: 10px;">
+              <i class="fas fa-save"></i> Save Profile Details
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- VIEW 3: SKILLS MATRIX -->
+      <section class="admin-view" id="view-skills">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Skills Matrix</h3>
+              <p class="admin-card-desc">Manage what skills you know with proficiency levels</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddSkillModal()">
+              <i class="fas fa-plus"></i> Add New Skill
+            </button>
+          </div>
+
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Skill Name</th>
+                <th>Category</th>
+                <th>Proficiency</th>
+                <th>Tier</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="skills-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 4: LEARNING ROADMAP (KI KI SIKI) -->
+      <section class="admin-view" id="view-learning">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Currently Learning Roadmap</h3>
+              <p class="admin-card-desc">Share technologies, frameworks, and subjects you are currently mastering</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddLearningModal()">
+              <i class="fas fa-plus"></i> Add Learning Goal
+            </button>
+          </div>
+
+          <div id="learning-admin-list"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: RESOURCES HUB -->
+      <section class="admin-view" id="view-resources">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Public Resources Hub</h3>
+              <p class="admin-card-desc">Upload or link PDFs, roadmaps, cheat sheets, notes, and boilerplates</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddResourceModal()">
+              <i class="fas fa-plus"></i> Add New Resource
+            </button>
+          </div>
+
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Resource Title</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Download Link</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="resources-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 6: PROJECTS -->
+      <section class="admin-view" id="view-projects">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Featured Projects</h3>
+              <p class="admin-card-desc">Showcase applications, demos, and source codes</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddProjectModal()">
+              <i class="fas fa-plus"></i> Add New Project
+            </button>
+          </div>
+
+          <div id="projects-admin-list"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 7: CHANNELS & VIP CLUB -->
+      <section class="admin-view" id="view-channels-vip">
+        <!-- VIP Section Config -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title" style="color: var(--gold);"><i class="fas fa-crown"></i> VIP Exclusive Club Setup</h3>
+              <p class="admin-card-desc">Configure your private community tier, perks, and invite links</p>
+            </div>
+          </div>
+
+          <form id="vip-form">
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">VIP Club Title</label>
+                <input type="text" id="vip-title-input" class="form-control" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Access / Price Tag</label>
+                <input type="text" id="vip-price-input" class="form-control" placeholder="e.g. Private / Invite Only or $19/mo" required>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Tagline</label>
+              <input type="text" id="vip-tagline-input" class="form-control" required>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Full Description</label>
+              <textarea id="vip-desc-input" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">VIP Join / Contact URL (Telegram / WhatsApp / Discord)</label>
+              <input type="url" id="vip-url-input" class="form-control" placeholder="https://t.me/yourusername" required>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">VIP Perks List (One perk per line)</label>
+              <textarea id="vip-perks-input" class="form-control" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-action btn-primary">
+              <i class="fas fa-save"></i> Save VIP Club Settings
+            </button>
+          </form>
+        </div>
+
+        <!-- Channels List -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Public Channels & Communities</h3>
+              <p class="admin-card-desc">YouTube, Telegram, Discord, Facebook, and GitHub links</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddChannelModal()">
+              <i class="fas fa-plus"></i> Add Channel
+            </button>
+          </div>
+
+          <div id="channels-admin-list"></div>
+        </div>
+      </section>
+
+      <!-- VIEW: MASTER COPILOT (BOT 3 - PRIVATE ADMIN ONLY) -->
+      <section class="admin-view" id="view-copilot">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title copilot-header-title"><i class="fas fa-terminal"></i> Master Copilot &bull; Bot 3 (Private Admin AI)</h3>
+              <p class="admin-card-desc">Your private assistant to draft content, generate code, brainstorm resources, and manage inquiries</p>
+            </div>
+            <span class="badge-tag copilot-confidential-badge">
+              <i class="fas fa-lock"></i> Strictly Confidential
+            </span>
+          </div>
+
+          <!-- Quick Action Prompts -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <button class="suggestion-chip" onclick="sendCopilotQuickPrompt('Draft a high-impact tech resource guide for Full Stack Developers in 2026')">
+              📝 Draft New Resource
+            </button>
+            <button class="suggestion-chip" onclick="sendCopilotQuickPrompt('Summarize all received contact messages and highlight actionable job offers')">
+              📬 Summarize Messages
+            </button>
+            <button class="suggestion-chip" onclick="sendCopilotQuickPrompt('Suggest 3 cutting-edge tech topics I should add to my Learning Roadmap')">
+              🚀 Suggest Learning Topics
+            </button>
+            <button class="suggestion-chip" onclick="sendCopilotQuickPrompt('Write an engaging VIP club announcement post for Telegram')">
+              📢 Write VIP Announcement
+            </button>
+          </div>
+
+          <!-- Copilot Chat Window -->
+          <div id="copilot-chat-box" style="height: 400px; border-radius: var(--radius-md); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 0.92rem; margin-bottom: 16px;">
+            <div class="copilot-bubble-bot">
+              <strong>[Master Copilot Initialized]</strong><br>
+              Greetings, Agent 47. I am your private administrative copilot (Bot 3). I can write roadmaps, generate code, brainstorm syndicate content, and assist your daily workflow. How can I assist your platform today?
+            </div>
+          </div>
+
+          <!-- Copilot Input -->
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="copilot-input" class="form-control" placeholder="Ask your private copilot to draft, code, summarize, or plan..." style="flex: 1;">
+            <button id="copilot-send-btn" class="btn-action btn-primary" style="background: linear-gradient(135deg, #00ff88, #00f0ff); color: #000; font-weight: 700;">
+              <i class="fas fa-paper-plane"></i> Send to Copilot
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 8: AI BOT TRAINER -->
+      <section class="admin-view" id="view-ai">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">AI Knowledge Base & Triggers</h3>
+              <p class="admin-card-desc">Custom rules for the AI clone (used directly and as fallback when Gemini is offline)</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddRuleModal()">
+              <i class="fas fa-plus"></i> Add Training Rule
+            </button>
+          </div>
+
+          <div id="ai-rules-list"></div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Live AI Training Sandbox</h3>
+              <p class="admin-card-desc">Test how the bot responds to questions</p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+            <input type="text" id="ai-test-input" class="form-control" placeholder="e.g. What channels does Agent 47 run?" style="flex: 1;">
+            <button id="ai-test-btn" class="btn-action btn-primary">
+              <i class="fas fa-play"></i> Test Query
+            </button>
+          </div>
+
+          <div id="ai-test-output" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 16px; font-size: 0.9rem; line-height: 1.6;">
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 9: MESSAGES INBOX -->
+      <section class="admin-view" id="view-messages">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Contact Form Inquiries</h3>
+              <p class="admin-card-desc">Messages submitted by visitors on your live portfolio</p>
+            </div>
+          </div>
+
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Sender Name</th>
+                <th>Email</th>
+                <th>Message Snippet</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="messages-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 10: TRIPLE-BOT GEMINI & SECURITY SETTINGS -->
+      <section class="admin-view" id="view-settings">
+        <!-- Tri-Bot Configuration Card -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title"><i class="fas fa-robot" style="color: #00f0ff;"></i> Tri-Bot Gemini AI Ecosystem</h3>
+              <p class="admin-card-desc">Configure separate Google Gemini API Keys for each of your 3 specialized AI assistants</p>
+            </div>
+          </div>
+
+          <form id="triple-bot-form">
+            
+            <!-- BOT 1: BioBot Persona -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 18px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <h4 style="color: #38bdf8; font-family: var(--font-heading);"><i class="fas fa-user-astronaut"></i> Bot 1: BioBot Persona Engine</h4>
+                <span class="badge-tag badge-frontend">Public Profile Reader</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Answers questions about who you are, your skills, learning roadmap, channels, VIP club, and free resources.</p>
+              
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">API Key #1 (Persona)</label>
+                  <input type="password" id="key-bot-1" class="form-control" placeholder="AIzaSy...">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Model</label>
+                  <select id="model-bot-1" class="form-control">
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended)</option>
+                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash Latest</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-action btn-header-ghost" onclick="testSpecificKey('bot1')">
+                <i class="fas fa-vial"></i> Test & Verify Key #1
+              </button>
+            </div>
+
+            <!-- BOT 2: Public Omni Voice AI -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 18px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <h4 style="color: #a855f7; font-family: var(--font-heading);"><i class="fas fa-brain"></i> Bot 2: Omni AI Public Companion (Voice Enabled)</h4>
+                <span class="badge-tag badge-soft">General Public AI</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">For visitors to freely chat, brainstorm code, and use microphone voice input and audio speech.</p>
+              
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">API Key #2 (Public)</label>
+                  <input type="password" id="key-bot-2" class="form-control" placeholder="AIzaSy...">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Model</label>
+                  <select id="model-bot-2" class="form-control">
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended)</option>
+                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash Latest</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-action btn-header-ghost" onclick="testSpecificKey('bot2')">
+                <i class="fas fa-vial"></i> Test & Verify Key #2
+              </button>
+            </div>
+
+            <!-- BOT 3: Private Master Copilot -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 18px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <h4 style="color: #00ff88; font-family: var(--font-heading);"><i class="fas fa-terminal"></i> Bot 3: Private Master Copilot</h4>
+                <span class="badge-tag" style="background: rgba(0,255,136,0.15); color: #00ff88;">Admin Only</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Assists you inside the Admin Studio with content drafting, code creation, and task management.</p>
+              
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">API Key #3 (Private Copilot)</label>
+                  <input type="password" id="key-bot-3" class="form-control" placeholder="AIzaSy...">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Model</label>
+                  <select id="model-bot-3" class="form-control">
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended)</option>
+                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash Latest</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-action btn-header-ghost" onclick="testSpecificKey('bot3')">
+                <i class="fas fa-vial"></i> Test & Verify Key #3
+              </button>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
+              <button type="submit" class="btn-action btn-primary">
+                <i class="fas fa-save"></i> Save All 3 Bot Configurations
+              </button>
+              <button type="button" class="btn-action btn-header-ghost" onclick="syncKeyToAll()">
+                <i class="fas fa-copy"></i> Apply Key #1 to All 3 Bots
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Change Admin PIN -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title"><i class="fas fa-shield-alt" style="color: var(--gold);"></i> Admin Security Passcode</h3>
+              <p class="admin-card-desc">Change the secret PIN used to unlock this Admin Studio</p>
+            </div>
+          </div>
+
+          <form id="pin-change-form">
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Current PIN</label>
+                <input type="password" id="pin-current" class="form-control" placeholder="1234" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">New Secret PIN (4-12 digits/chars)</label>
+                <input type="password" id="pin-new" class="form-control" placeholder="e.g. 7890" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-action btn-primary">
+              <i class="fas fa-key"></i> Update Security PIN
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- VIEW 11: BACKUP & EXPORT -->
+      <section class="admin-view" id="view-export">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Backup & Code Export</h3>
+              <p class="admin-card-desc">Export your custom changes to a standalone file or reset back to default</p>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 20px;">
+              <h4 style="color: #fff; margin-bottom: 6px;">1-Click Download `profile-data.js`</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Download a complete ready-to-use JavaScript file containing your exact configuration.</p>
+              <button class="btn-action btn-primary" id="btn-download-js">
+                <i class="fas fa-file-download"></i> Download profile-data.js
+              </button>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 20px;">
+              <h4 style="color: #fff; margin-bottom: 6px;">Copy Raw JSON</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Copy complete profile data in structured JSON format to your clipboard.</p>
+              <button class="btn-action btn-primary" id="btn-copy-json">
+                <i class="fas fa-copy"></i> Copy JSON to Clipboard
+              </button>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm); padding: 20px; margin-top: 10px;">
+              <h4 style="color: #f87171; margin-bottom: 6px;">Reset to Factory Defaults</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Clear all local changes and revert back to original template data.</p>
+              <button class="btn-action btn-danger" id="btn-reset-data">
+                <i class="fas fa-undo"></i> Reset All Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==============================================
+       MODALS
+       ============================================== -->
+
+  <!-- Skill Modal -->
+  <div class="admin-modal-overlay" id="skill-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="skill-modal-title">Add Skill</h3>
+        <button class="modal-close-btn" onclick="closeModal('skill-modal')">&times;</button>
+      </div>
+      <form id="skill-modal-form">
+        <div class="form-field">
+          <label class="form-label">Skill Name</label>
+          <input type="text" id="skill-name" class="form-control" placeholder="e.g. Next.js" required>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <select id="skill-category" class="form-control" required>
+              <option value="frontend">Frontend</option>
+              <option value="backend">Backend & DB</option>
+              <option value="tools">Tools & DevOps</option>
+              <option value="soft">Soft Skills</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Badge Tier</label>
+            <input type="text" id="skill-badge" class="form-control" placeholder="e.g. Expert, Advanced" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Proficiency Level: <span id="skill-level-val" style="color: var(--secondary); font-family: var(--font-code);">85%</span></label>
+          <input type="range" id="skill-level" min="10" max="100" value="85" style="width: 100%; accent-color: var(--primary);">
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">FontAwesome Icon Class</label>
+          <input type="text" id="skill-icon" class="form-control" placeholder="fab fa-react or fas fa-code" required>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Skill</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Learning Goal Modal -->
+  <div class="admin-modal-overlay" id="learning-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="learning-modal-title">Add Learning Roadmap Goal</h3>
+        <button class="modal-close-btn" onclick="closeModal('learning-modal')">&times;</button>
+      </div>
+      <form id="learning-modal-form">
+        <div class="form-field">
+          <label class="form-label">Topic / Skill Title</label>
+          <input type="text" id="learn-title" class="form-control" placeholder="e.g. Autonomous AI Agents" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description / Summary</label>
+          <textarea id="learn-desc" class="form-control" rows="3" placeholder="What are you building or mastering in this topic?" required></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Status Badge</label>
+            <input type="text" id="learn-badge" class="form-control" placeholder="e.g. Actively Exploring, In Progress" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Progress: <span id="learn-progress-val" style="color: var(--secondary);">75%</span></label>
+            <input type="range" id="learn-progress" min="5" max="100" value="75" style="width: 100%; accent-color: var(--secondary);">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Tags (comma separated)</label>
+          <input type="text" id="learn-tags" class="form-control" placeholder="LangChain, Gemini 1.5, Vector DB" required>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Learning Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Resource Modal -->
+  <div class="admin-modal-overlay" id="resource-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="resource-modal-title">Add Public Resource</h3>
+        <button class="modal-close-btn" onclick="closeModal('resource-modal')">&times;</button>
+      </div>
+      <form id="resource-modal-form">
+        <div class="form-field">
+          <label class="form-label">Resource Title</label>
+          <input type="text" id="res-title" class="form-control" placeholder="e.g. Full Stack Developer Mastery Roadmap" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description</label>
+          <textarea id="res-desc" class="form-control" rows="2" placeholder="Brief summary of what this guide/file provides..." required></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <select id="res-category" class="form-control" required>
+              <option value="Roadmaps">Roadmaps</option>
+              <option value="Cheat Sheets">Cheat Sheets</option>
+              <option value="Templates">Templates</option>
+              <option value="Interview Prep">Interview Prep</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">File Type</label>
+            <input type="text" id="res-type" class="form-control" placeholder="e.g. PDF Guide, ZIP Boilerplate" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">File Size</label>
+            <input type="text" id="res-size" class="form-control" placeholder="e.g. 3.5 MB" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">FontAwesome Icon</label>
+            <input type="text" id="res-icon" class="form-control" placeholder="fas fa-file-pdf or fas fa-file-code" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Download URL / Google Drive / GitHub Link</label>
+          <input type="text" id="res-url" class="form-control" placeholder="https://..." required>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Resource</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Channel Modal -->
+  <div class="admin-modal-overlay" id="channel-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="channel-modal-title">Add Channel / Community</h3>
+        <button class="modal-close-btn" onclick="closeModal('channel-modal')">&times;</button>
+      </div>
+      <form id="channel-modal-form">
+        <div class="form-field">
+          <label class="form-label">Platform / Channel Name</label>
+          <input type="text" id="chan-name" class="form-control" placeholder="e.g. YouTube Channel, Telegram Group" required>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Handle / Username</label>
+            <input type="text" id="chan-handle" class="form-control" placeholder="e.g. @Agent47Dev" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Subscribers / Members Count</label>
+            <input type="text" id="chan-members" class="form-control" placeholder="e.g. 15K+ Subscribers" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description</label>
+          <textarea id="chan-desc" class="form-control" rows="2" placeholder="Brief summary of what content you share here..." required></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Channel URL</label>
+            <input type="url" id="chan-url" class="form-control" placeholder="https://..." required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Icon Class (FontAwesome)</label>
+            <input type="text" id="chan-icon" class="form-control" placeholder="fab fa-youtube, fab fa-telegram-plane" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Channel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div class="admin-modal-overlay" id="project-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="project-modal-title">Add Project</h3>
+        <button class="modal-close-btn" onclick="closeModal('project-modal')">&times;</button>
+      </div>
+      <form id="project-modal-form">
+        <div class="form-field">
+          <label class="form-label">Project Title</label>
+          <input type="text" id="project-title" class="form-control" placeholder="e.g. Real-time Chat App" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description</label>
+          <textarea id="project-desc" class="form-control" rows="3" placeholder="Brief summary of what this project does..." required></textarea>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Tech Stack Tags (comma separated)</label>
+          <input type="text" id="project-tags" class="form-control" placeholder="React, Node.js, Socket.io" required>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">GitHub URL</label>
+            <input type="url" id="project-github" class="form-control" placeholder="https://github.com/...">
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Live Demo URL</label>
+            <input type="text" id="project-demo" class="form-control" placeholder="https://... or #">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Project</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- AI Rule Modal -->
+  <div class="admin-modal-overlay" id="rule-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="rule-modal-title">Add AI Knowledge Rule</h3>
+        <button class="modal-close-btn" onclick="closeModal('rule-modal')">&times;</button>
+      </div>
+      <form id="rule-modal-form">
+        <div class="form-field">
+          <label class="form-label">Keyword Triggers (comma separated)</label>
+          <input type="text" id="rule-keywords" class="form-control" placeholder="e.g. salary, fees, availability, hourly rate" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Bot Response</label>
+          <textarea id="rule-response" class="form-control" rows="4" placeholder="Enter what the bot should answer..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Rule</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/profile-data.js?v=2.6"></script>
+  <script src="js/admin.js?v=2.6"></script>
+</body>
+</html>

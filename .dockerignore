@@ -1,0 +1,7 @@
+.git
+.gitignore
+agent47_deploy.zip
+deploy.sh
+Dockerfile
+docker-compose.yml
+README_DEPLOYMENT.md

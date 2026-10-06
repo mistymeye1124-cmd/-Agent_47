@@ -6,7 +6,10 @@
   <title>Agent 47 | Private Admin Studio</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%23070a13'/%3E%3Cpath d='M30 35 L50 65 L70 35' stroke='%2300ff88' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='65' r='6' fill='%2300f0ff'/%3E%3C/svg%3E">
 
-  <!-- Google Fonts & Font Awesome Icons -->
+  <!-- Google Fonts Preconnect & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
   <!-- Instant Theme Initializer (Prevents Flash) -->
@@ -90,7 +93,7 @@
       <div class="nav-item" data-view="view-diary">
         <div class="nav-item-left">
           <i class="fas fa-book-open" style="color: #c084fc;"></i>
-          <span>My Diary (মনের কথা)</span>
+          <span>My Diary</span>
         </div>
         <span class="badge-tag" style="font-size: 0.65rem; background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3);">LOCK/UNLOCK</span>
       </div>
@@ -491,12 +494,12 @@
         </div>
       </section>
 
-      <!-- VIEW: MY DIARY & PERSONAL REFLECTIONS (মনের কথা) -->
+      <!-- VIEW: MY DIARY & PERSONAL REFLECTIONS -->
       <section class="admin-view" id="view-diary">
         <div class="admin-card">
           <div class="admin-card-header">
             <div>
-              <h3 class="admin-card-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> My Diary & Personal Reflections (মনের কথা)</h3>
+              <h3 class="admin-card-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> My Diary & Personal Reflections</h3>
               <p class="admin-card-desc">Write your personal thoughts, daily learnings, and life updates. Toggle visibility with 1-click between 🔒 Private (strictly admin only) and 🌐 Public (visible to everybody on your portfolio).</p>
             </div>
             <button class="btn-action btn-primary" onclick="openAddDiaryModal()" style="background: linear-gradient(135deg, #a855f7, #6366f1); border-color: rgba(168,85,247,0.4);">
@@ -512,11 +515,11 @@
             </div>
             <div class="diary-stat-box" style="border-color: rgba(16, 185, 129, 0.35);">
               <span class="diary-stat-num" style="color: #34d399;" id="diary-stat-public">0</span>
-              <span class="diary-stat-label">🌐 Public (সবাই দেখবে)</span>
+              <span class="diary-stat-label">🌐 Public Entries</span>
             </div>
             <div class="diary-stat-box" style="border-color: rgba(239, 68, 68, 0.35);">
               <span class="diary-stat-num" style="color: #f87171;" id="diary-stat-private">0</span>
-              <span class="diary-stat-label">🔒 Private (শুধুমাত্র আমি)</span>
+              <span class="diary-stat-label">🔒 Private Entries</span>
             </div>
           </div>
 
@@ -1302,38 +1305,38 @@ Production Cloud Deployment" required></textarea>
     </div>
   </div>
 
-  <!-- Diary Entry Modal (মনের কথা - Public / Private Selector) -->
+  <!-- Diary Entry Modal (Public / Private Selector) -->
   <div class="admin-modal-overlay" id="diary-modal">
     <div class="admin-modal-box">
       <div class="modal-header">
-        <h3 id="diary-modal-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry (মনের কথা)</h3>
+        <h3 id="diary-modal-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry</h3>
         <button class="modal-close-btn" onclick="closeModal('diary-modal')">&times;</button>
       </div>
       <form id="diary-modal-form">
         <input type="hidden" id="diary-id">
 
         <div class="form-field">
-          <label class="form-label">Entry Title (শিরোনাম)</label>
-          <input type="text" id="diary-title" class="form-control" placeholder="e.g. আজকের উপলব্ধি ও আগামী দিনের পরিকল্পনা" required>
+          <label class="form-label">Entry Title</label>
+          <input type="text" id="diary-title" class="form-control" placeholder="e.g. Daily Insights & Next Milestone Plan" required>
         </div>
 
         <div class="form-grid-2">
           <div class="form-field">
-            <label class="form-label">Date (তারিখ)</label>
+            <label class="form-label">Date</label>
             <input type="date" id="diary-date" class="form-control" required>
           </div>
 
           <div class="form-field">
-            <label class="form-label">Mood / Emotion (মুড)</label>
+            <label class="form-label">Mood / Emotion</label>
             <input type="text" id="diary-mood" class="form-control" placeholder="e.g. 🔥 Determined, 🚀 Inspired, 🧘 Calm" list="mood-suggestions" required>
             <datalist id="mood-suggestions">
-              <option value="🔥 Determined">
-              <option value="🚀 Inspired">
-              <option value="💡 Reflection">
-              <option value="🎯 Laser Focused">
-              <option value="🧘 Calm & Thoughtful">
-              <option value="⚡ Energetic">
-              <option value="🔒 Private Thoughts">
+              <option value="🔥 Determined"></option>
+              <option value="🚀 Inspired"></option>
+              <option value="💡 Reflection"></option>
+              <option value="🎯 Laser Focused"></option>
+              <option value="🧘 Calm & Thoughtful"></option>
+              <option value="⚡ Energetic"></option>
+              <option value="🔒 Private Thoughts"></option>
             </datalist>
           </div>
         </div>
@@ -1341,26 +1344,26 @@ Production Cloud Deployment" required></textarea>
         <!-- KEY PRIVACY SELECTOR -->
         <div class="form-field">
           <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
-            <span><i class="fas fa-eye"></i> Visibility & Privacy (কে কে দেখবে?)</span>
+            <span><i class="fas fa-eye"></i> Visibility & Privacy</span>
             <span style="font-size: 0.75rem; color: #c084fc; font-weight: 700;">Selective Sharing Control</span>
           </label>
           <select id="diary-is-public" class="form-control" style="font-weight: 600; padding: 10px 14px; border-color: rgba(168,85,247,0.4);" required>
-            <option value="false">🔒 PRIVATE — শুধুমাত্র আমি দেখবো (Confidential / Hidden from public site)</option>
-            <option value="true">🌐 PUBLIC — সবাই দেখবে (Visible on your live portfolio website)</option>
+            <option value="false">🔒 PRIVATE — Confidential (Hidden from public site)</option>
+            <option value="true">🌐 PUBLIC — Live Portfolio (Visible to visitors on website)</option>
           </select>
           <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
-            <i class="fas fa-shield-alt"></i> Private নির্বাচন করলে এটি কখনোই আপনার পাবলিক পোর্টফোলিওতে শো করবে না। শুধুমাত্র এই অ্যাডমিন প্যানেলে সংরক্ষিত থাকবে।
+            <i class="fas fa-shield-alt"></i> Setting to Private ensures this entry is strictly hidden from your public portfolio and stored only in Admin Studio.
           </small>
         </div>
 
         <div class="form-field">
-          <label class="form-label">Tags (ট্যাগ - comma separated)</label>
+          <label class="form-label">Tags (comma separated)</label>
           <input type="text" id="diary-tags" class="form-control" placeholder="Mindset, Growth, Coding, Life" required>
         </div>
 
         <div class="form-field">
-          <label class="form-label">Content / Moner Kotha (মনের কথা বিস্তারিত)</label>
-          <textarea id="diary-content" class="form-control" rows="6" placeholder="আপনার মনের কথা, ভাবনা, আজকের দিনের অর্জন বা আত্মোপলব্ধি লিখুন..." required></textarea>
+          <label class="form-label">Content / Reflection Body</label>
+          <textarea id="diary-content" class="form-control" rows="6" placeholder="Write your thoughts, daily learnings, breakthroughs, or life reflections..." required></textarea>
         </div>
 
         <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px; background: linear-gradient(135deg, #a855f7, #6366f1); border-color: rgba(168,85,247,0.4);">

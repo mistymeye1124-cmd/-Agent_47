@@ -79,6 +79,11 @@ function initCyberMatrix() {
   let lastTime = 0;
 
   function render(time) {
+    if (document.hidden) {
+      requestAnimationFrame(render);
+      return;
+    }
+
     const delta = time - lastTime;
     lastTime = time;
 

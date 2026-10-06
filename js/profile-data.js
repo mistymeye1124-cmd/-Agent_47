@@ -74,7 +74,7 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
     { id: "sk_17", name: "Fast Learner & Adaptability", category: "soft", importance: "core", level: 96, badge: "Master", icon: "fas fa-bolt" }
   ],
 
-  // --- Currently Learning Roadmap (Ki Ki Siki) ---
+  // --- Currently Learning Roadmap ---
   learningRoadmap: [
     {
       id: "learn_1",
@@ -352,7 +352,7 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
     }
   ],
 
-  // --- Personal Diary (মনের কথা & Thoughts Chronicle) ---
+  // --- Personal Diary & Reflections Chronicle ---
   diaryEntries: [
     {
       id: "diary_1",
@@ -403,12 +403,12 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       },
       {
         id: "rule_2",
-        keywords: ["skill", "skills", "tech stack", "technologies", "what do you know", "programming", "ki ki skill", "dokhota"],
+        keywords: ["skill", "skills", "tech stack", "technologies", "what do you know", "programming", "capabilities", "languages"],
         response: "Agent 47 commands an arsenal of high-grade technologies: 💻 Frontend: JavaScript (ES6+), React.js, Next.js, HTML5/CSS3, TypeScript. ⚙️ Backend: Python (FastAPI, Django), Node.js, REST & GraphQL APIs, PostgreSQL, MongoDB. 🛠️ Tools: Git, Docker, Linux Systems, Cloud Deployment, CI/CD. Explore the 'Capabilities Matrix' for detailed metrics."
       },
       {
         id: "rule_3",
-        keywords: ["learning", "siki", "ki ki siki", "roadmap", "currently learning", "shikhteso", "shikho", "track", "kaj shikho"],
+        keywords: ["learning", "study", "roadmap", "currently learning", "studies", "track", "progress", "growth"],
         response: "Agent 47 actively tracks his growth with real-time milestones: 🤖 Autonomous AI Agents & Swarms, 🏗️ Distributed High-Availability Systems (Kafka, Redis), ⚡ Next.js 15 Server Components, and 🦀 Rust Systems Programming. Check the 'Tech Roadmap & Work Tracker' section for live progress and daily study logs."
       },
       {
@@ -428,23 +428,23 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       },
       {
         id: "rule_7",
-        keywords: ["contact", "hire", "email", "reach", "hire you", "job", "message", "jogajog", "kotha bolbo"],
+        keywords: ["contact", "hire", "email", "reach", "hire you", "job", "message", "inquiry", "connect"],
         response: "You can transmit an inquiry to Agent 47 via agent47@agency.net, connect via LinkedIn, or send an encrypted message via the Contact terminal at the bottom of this page."
       },
       {
         id: "rule_8",
-        keywords: ["bangla", "bangla janen", "tumi ke", "ki khobor", "kemon acho", "bhalo"],
-        response: "Haa! Ami Bangla ebong Banglish shundorbhabe bujhte o bolte pari! Ami Agent 47-er AI clone. Apni tar skills, learning roadmap, services, channels, VIP syndicate ba resources niye jekono proshno korte paren!"
+        keywords: ["who are you", "what can you do", "introduce yourself", "identity", "about bot"],
+        response: "I am the official digital AI clone of Agent 47, an elite Software Operative & Security Architect. I can provide comprehensive information regarding technical skills, learning roadmap progress, services, channels, VIP syndicate access, or engineering resources."
       },
       {
         id: "rule_9",
-        keywords: ["service", "services", "hire", "business", "freelance", "contract", "client", "custom project", "kaj korben", "kaj dibo", "offer"],
+        keywords: ["service", "services", "hire", "business", "freelance", "contract", "client", "custom project", "proposal", "offer"],
         response: "I deliver 4 core business solutions: 🚀 1. Custom Full-Stack Web & SaaS Applications (Next.js/React, Python, Node). 🤖 2. Autonomous AI Agents & Workflows (Gemini/OpenAI automation, customer bots). ⚡ 3. High-Performance Cloud APIs & Microservices (FastAPI, Docker, PostgreSQL). 🛡️ 4. Code Audits, Security & Architecture Consulting. Connect via the Contact section to discuss your project scope!"
       },
       {
         id: "rule_10",
-        keywords: ["diary", "moner kotha", "thoughts", "notes", "reflection", "personal diary", "journal", "diary entry"],
-        response: "I maintain a personal diary (মনের কথা) documenting real-life insights, daily coding breakthroughs, and mindset reflections. Public reflections are open for everyone in the My Diary section, while private entries remain strictly encrypted under Admin Studio lock!"
+        keywords: ["diary", "thoughts", "notes", "reflection", "personal diary", "journal", "diary entry"],
+        response: "I maintain a personal diary documenting real-life insights, daily coding breakthroughs, and mindset reflections. Public reflections are open for everyone in the My Diary section, while private entries remain strictly encrypted under Admin Studio lock!"
       }
     ],
     defaultResponse: "That is a valid inquiry. You can explore this terminal, ask about Agent 47's skills, channels, or VIP syndicate, or reach out via agent47@agency.net."
@@ -550,10 +550,10 @@ function getProfileData() {
         ...DEFAULT_PROFILE_DATA,
         ...parsed,
         personal: { ...DEFAULT_PROFILE_DATA.personal, ...(parsed.personal || {}) },
-        services: (parsed.services && parsed.services.length) ? parsed.services : DEFAULT_PROFILE_DATA.services,
-        workLogs: (parsed.workLogs && parsed.workLogs.length) ? parsed.workLogs : DEFAULT_PROFILE_DATA.workLogs,
-        diaryEntries: (parsed.diaryEntries && parsed.diaryEntries.length) ? parsed.diaryEntries : DEFAULT_PROFILE_DATA.diaryEntries,
-        learningRoadmap: (parsed.learningRoadmap && parsed.learningRoadmap.length) ? parsed.learningRoadmap : DEFAULT_PROFILE_DATA.learningRoadmap,
+        services: Array.isArray(parsed.services) ? parsed.services : DEFAULT_PROFILE_DATA.services,
+        workLogs: Array.isArray(parsed.workLogs) ? parsed.workLogs : DEFAULT_PROFILE_DATA.workLogs,
+        diaryEntries: Array.isArray(parsed.diaryEntries) ? parsed.diaryEntries : DEFAULT_PROFILE_DATA.diaryEntries,
+        learningRoadmap: Array.isArray(parsed.learningRoadmap) ? parsed.learningRoadmap : DEFAULT_PROFILE_DATA.learningRoadmap,
         vipCommunity: { ...DEFAULT_PROFILE_DATA.vipCommunity, ...(parsed.vipCommunity || {}) },
         aiAssistant: { ...DEFAULT_PROFILE_DATA.aiAssistant, ...(parsed.aiAssistant || {}) }
       };
@@ -598,8 +598,13 @@ function getAdminPasscode() {
 }
 
 function setAdminPasscode(newPin) {
-  localStorage.setItem(STORAGE_KEY_PIN, newPin);
-  return true;
+  try {
+    localStorage.setItem(STORAGE_KEY_PIN, newPin);
+    return true;
+  } catch (e) {
+    console.error('Error saving passcode:', e);
+    return false;
+  }
 }
 
 const STORAGE_KEY_TRIPLE_BOT = 'app_triple_bot_config';

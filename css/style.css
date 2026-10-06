@@ -1388,7 +1388,7 @@ body {
 }
 
 /* ==========================================================
-   CURRENTLY LEARNING ROADMAP (KI KI SIKI)
+   CURRENTLY LEARNING ROADMAP
    ========================================================== */
 .learning-grid {
   display: grid;
@@ -4191,7 +4191,7 @@ body {
 }
 
 /* ==========================================================
-   MY DIARY & PERSONAL REFLECTIONS (মনের কথা)
+   MY DIARY & PERSONAL REFLECTIONS
    ========================================================== */
 .diary-controls {
   display: flex;
@@ -4543,4 +4543,58 @@ body {
 }
 [data-theme="light"] .diary-modal-body {
   color: #334155 !important;
+}
+
+/* Light Mode Overrides for Work Logs & Learning Tracker */
+[data-theme="light"] .tracker-metric-chip {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+[data-theme="light"] .tracker-metric-chip:hover {
+  border-color: #0284c7 !important;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12) !important;
+}
+[data-theme="light"] .chip-val {
+  color: #0f172a !important;
+}
+[data-theme="light"] .chip-lbl {
+  color: #64748b !important;
+}
+[data-theme="light"] .work-log-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .work-log-card:hover {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.12) !important;
+}
+[data-theme="light"] .work-log-title {
+  color: #0f172a !important;
+}
+[data-theme="light"] .work-log-desc {
+  color: #475569 !important;
+}
+[data-theme="light"] .log-date {
+  color: #64748b !important;
+}
+[data-theme="light"] .log-line {
+  background: #e2e8f0 !important;
+}
+[data-theme="light"] .work-log-proof {
+  border-top-color: #e2e8f0 !important;
+}
+[data-theme="light"] .learning-milestones-box {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+[data-theme="light"] .learning-hours-badge {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.1) !important;
+  border-color: rgba(2, 132, 199, 0.25) !important;
+}
+[data-theme="light"] .skill-card-core {
+  background: linear-gradient(145deg, #ffffff 0%, #fef3c7 100%) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
 }

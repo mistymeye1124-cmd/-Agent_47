@@ -48,6 +48,16 @@ function initAdminThemeToggle() {
   }
 }
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 /* ==========================================================
    AUTHENTICATION / PIN LOCK
    ========================================================== */
@@ -61,7 +71,7 @@ function initAuth() {
   const eyeIcon = document.getElementById('pin-eye-icon');
 
   if (sessionStorage.getItem('admin_authenticated') === 'true') {
-    pinOverlay.classList.add('hidden');
+    if (pinOverlay) pinOverlay.classList.add('hidden');
   }
 
   // Eye visibility toggle
@@ -75,12 +85,13 @@ function initAuth() {
   }
 
   function handleUnlock() {
+    if (!pinInput) return;
     const entered = pinInput.value.trim();
     const storedPin = getAdminPasscode();
 
     if (entered === storedPin) {
       sessionStorage.setItem('admin_authenticated', 'true');
-      pinOverlay.classList.add('hidden');
+      if (pinOverlay) pinOverlay.classList.add('hidden');
       pinInput.value = '';
       showToast('Welcome back, Admin!', 'success');
       loadAllAdminData();
@@ -105,7 +116,7 @@ function initAuth() {
   if (lockBtn) {
     lockBtn.addEventListener('click', () => {
       sessionStorage.removeItem('admin_authenticated');
-      pinOverlay.classList.remove('hidden');
+      if (pinOverlay) pinOverlay.classList.remove('hidden');
       showToast('Session locked', 'info');
       setTimeout(() => pinInput && pinInput.focus(), 150);
     });
@@ -689,12 +700,12 @@ function renderWorkLogsTable(data) {
 
   tbody.innerHTML = logs.map((log, idx) => `
     <tr>
-      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--text-dim);">${log.date}</span></td>
-      <td><span class="badge-tag badge-backend">${log.category || 'General'}</span></td>
-      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--gold);">${log.hours || '-'}</span></td>
+      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--text-dim);">${escapeHtml(log.date)}</span></td>
+      <td><span class="badge-tag badge-backend">${escapeHtml(log.category || 'General')}</span></td>
+      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--gold);">${escapeHtml(log.hours || '-')}</span></td>
       <td>
-        <strong>${log.title}</strong>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin: 2px 0 0; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${log.description}</p>
+        <strong>${escapeHtml(log.title)}</strong>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin: 2px 0 0; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(log.description)}</p>
       </td>
       <td>
         ${log.proofUrl && log.proofUrl !== '#' ? `
@@ -759,7 +770,7 @@ window.deleteWorkLog = function(idx) {
 };
 
 /* ==========================================================
-   PERSONAL DIARY & REFLECTIONS (মনের কথা) CMS CONTROLLER
+   PERSONAL DIARY & REFLECTIONS CMS CONTROLLER
    ========================================================== */
 let activeDiaryAdminFilter = 'all';
 let diaryAdminSearchQuery = '';
@@ -829,28 +840,28 @@ function renderDiaryAdmin(data) {
   listContainer.innerHTML = filtered.map(entry => {
     const isPub = entry.isPublic === true;
     const badgeHtml = isPub 
-      ? `<span class="diary-admin-badge-public" title="This reflection is visible on your live website"><i class="fas fa-globe"></i> 🌐 PUBLIC (সবাই দেখবে)</span>`
-      : `<span class="diary-admin-badge-private" title="Confidential: Only you can see this in Admin"><i class="fas fa-lock"></i> 🔒 PRIVATE (শুধুমাত্র আমি)</span>`;
+      ? `<span class="diary-admin-badge-public" title="This reflection is visible on your live website"><i class="fas fa-globe"></i> 🌐 PUBLIC</span>`
+      : `<span class="diary-admin-badge-private" title="Confidential: Only you can see this in Admin"><i class="fas fa-lock"></i> 🔒 PRIVATE</span>`;
 
     const toggleBtnLabel = isPub 
       ? `<i class="fas fa-lock"></i> Make Private` 
       : `<i class="fas fa-globe"></i> Make Public`;
 
-    const tagsHtml = (entry.tags || []).map(t => `<span class="badge-tag">${t}</span>`).join(' ');
+    const tagsHtml = (entry.tags || []).map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join(' ');
 
     return `
       <div class="diary-admin-card" id="diary-item-${entry.id}">
         <div class="diary-admin-card-header">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <h4 class="diary-admin-card-title">${entry.title}</h4>
-            ${entry.mood ? `<span class="badge-tag" style="background: rgba(168,85,247,0.15); color: #d8b4fe;">${entry.mood}</span>` : ''}
+            <h4 class="diary-admin-card-title">${escapeHtml(entry.title)}</h4>
+            ${entry.mood ? `<span class="badge-tag" style="background: rgba(168,85,247,0.15); color: #d8b4fe;">${escapeHtml(entry.mood)}</span>` : ''}
           </div>
           <div class="diary-admin-badges">
             ${badgeHtml}
           </div>
         </div>
 
-        <div class="diary-admin-content-preview">${entry.content}</div>
+        <div class="diary-admin-content-preview">${escapeHtml(entry.content)}</div>
 
         <div class="diary-admin-card-footer">
           <div class="diary-admin-meta-info">
@@ -908,7 +919,7 @@ window.toggleDiaryPrivacy = function(id) {
 
 window.openAddDiaryModal = function() {
   editingDiaryId = null;
-  document.getElementById('diary-modal-title').innerHTML = '<i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry (মনের কথা)';
+  document.getElementById('diary-modal-title').innerHTML = '<i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry';
   document.getElementById('diary-id').value = '';
   document.getElementById('diary-title').value = '';
   document.getElementById('diary-date').value = new Date().toISOString().split('T')[0];
@@ -1615,9 +1626,12 @@ function initSettings() {
         return;
       }
 
-      setAdminPasscode(newPin);
-      pinForm.reset();
-      showToast('Admin PIN updated successfully!', 'success');
+      if (setAdminPasscode(newPin)) {
+        pinForm.reset();
+        showToast('Admin PIN updated successfully!', 'success');
+      } else {
+        showToast('Could not save PIN to storage!', 'danger');
+      }
     };
   }
 }
@@ -1963,10 +1977,33 @@ const DEFAULT_PROFILE_DATA = ${JSON.stringify(data, null, 2)};
   if (btnCopyJson) {
     btnCopyJson.addEventListener('click', () => {
       const data = getProfileData();
-      navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => {
-        showToast('JSON copied to clipboard!', 'success');
-      });
+      const text = JSON.stringify(data, null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('JSON copied to clipboard!', 'success');
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
     });
+  }
+
+  function fallbackCopyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showToast('JSON copied to clipboard!', 'success');
+    } catch(e) {
+      showToast('Copy not allowed by browser. Use Download JS instead.', 'danger');
+    }
+    document.body.removeChild(ta);
   }
 
   const btnReset = document.getElementById('btn-reset-data');

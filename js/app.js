@@ -272,6 +272,14 @@ function initNavDotsMenu() {
       dotsBtn.classList.remove('active');
     });
   });
+
+  // Close when pressing Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+      dropdown.classList.remove('open');
+      dotsBtn.classList.remove('active');
+    }
+  });
 }
 
 /* ==========================================================
@@ -547,6 +555,15 @@ function renderSkillsGrid(data) {
     return matchesCat && matchesSearch;
   });
 
+  // Priority sorting: Core (1) > Secondary (2) > Optional (3) > Other, then level descending
+  filtered.sort((a, b) => {
+    const priority = { 'core': 1, 'secondary': 2, 'optional': 3 };
+    const pA = priority[a.importance] || 4;
+    const pB = priority[b.importance] || 4;
+    if (pA !== pB) return pA - pB;
+    return (b.level || 0) - (a.level || 0);
+  });
+
   if (filtered.length === 0) {
     skillsContainer.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-dim);">
@@ -656,13 +673,10 @@ function renderServicesGrid(data) {
 
 window.handleServiceInquire = function(serviceTitle) {
   CyberSFX.click();
-  const subjectInput = document.getElementById('contact-subject');
-  if (subjectInput) {
-    subjectInput.value = `Project Inquiry: ${serviceTitle}`;
-  }
-  const msgInput = document.getElementById('contact-message');
-  if (msgInput && !msgInput.value) {
-    msgInput.value = `Hello! I would like to discuss a project regarding "${serviceTitle}". Let's connect on scope, timeline, and deliverables.`;
+  const msgInput = document.getElementById('form-message');
+  if (msgInput) {
+    msgInput.value = `Hello Agent 47! I would like to inquire about "${serviceTitle}". Let's discuss project scope, deliverables, and timeline.`;
+    msgInput.focus();
   }
 };
 
@@ -825,6 +839,17 @@ function initLearningInteractions() {
   });
 }
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+const escapeDiaryHtml = escapeHtml;
+
 function renderWorkLogs(data) {
   const container = document.getElementById('work-logs-timeline');
   if (!container) return;
@@ -844,20 +869,20 @@ function renderWorkLogs(data) {
       <div class="work-log-card">
         <div class="work-log-card-header">
           <div class="log-meta">
-            <span class="log-date"><i class="far fa-calendar-alt"></i> ${log.date}</span>
-            <span class="log-category-pill">${log.category || 'General'}</span>
-            ${log.hours ? `<span class="log-hours-pill"><i class="fas fa-hourglass-half"></i> ${log.hours}</span>` : ''}
+            <span class="log-date"><i class="far fa-calendar-alt"></i> ${escapeHtml(log.date)}</span>
+            <span class="log-category-pill">${escapeHtml(log.category || 'General')}</span>
+            ${log.hours ? `<span class="log-hours-pill"><i class="fas fa-hourglass-half"></i> ${escapeHtml(log.hours)}</span>` : ''}
           </div>
           <span class="log-status-badge ${log.status === 'Completed' ? 'status-completed' : 'status-wip'}">
             <i class="${log.status === 'Completed' ? 'fas fa-check' : 'fas fa-sync-alt fa-spin'}"></i>
-            ${log.status || 'Completed'}
+            ${escapeHtml(log.status || 'Completed')}
           </span>
         </div>
-        <h4 class="work-log-title">${log.title}</h4>
-        <p class="work-log-desc">${log.description}</p>
+        <h4 class="work-log-title">${escapeHtml(log.title)}</h4>
+        <p class="work-log-desc">${escapeHtml(log.description)}</p>
         ${log.proofUrl && log.proofUrl !== '#' ? `
           <div class="work-log-proof">
-            <a href="${log.proofUrl}" target="_blank" rel="noopener noreferrer" class="btn-proof-link" onclick="CyberSFX.click()">
+            <a href="${encodeURI(log.proofUrl)}" target="_blank" rel="noopener noreferrer" class="btn-proof-link" onclick="CyberSFX.click()">
               <i class="fab fa-github"></i> <span>View Code / Proof</span> <i class="fas fa-external-link-alt"></i>
             </a>
           </div>
@@ -868,20 +893,10 @@ function renderWorkLogs(data) {
 }
 
 /* ==========================================================
-   MY DIARY & PERSONAL REFLECTIONS (মনের কথা)
+   MY DIARY & PERSONAL REFLECTIONS
    ========================================================== */
 let activeDiaryTag = 'all';
 let diarySearchTerm = '';
-
-function escapeDiaryHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
 
 function renderDiaryGrid(data) {
   const container = document.getElementById('diary-grid');

@@ -96,8 +96,10 @@ function initAIAssistant() {
 
   if (micBtn) {
     micBtn.onclick = () => {
-      if (isListening) {
-        recognition.stop();
+      if (isListening && recognition) {
+        try {
+          recognition.stop();
+        } catch (e) {}
       } else {
         startListening();
       }
@@ -364,12 +366,12 @@ Here is your complete profile:
 
 Instructions:
 1. Speak sharply and confidently in first-person as Agent 47's AI clone.
-2. If visitor asks in Bengali or Banglish, reply warmly in conversational Bangla/Banglish! If in English, reply in crisp English.
+2. Always respond in fluent, crisp, and professional English.
 3. Be concise and direct them to relevant sections (Capabilities, Roadmap, Channels, VIP Syndicate, Resources).`;
     } else {
       systemPrompt = `You are Omni AI, an intelligent, versatile Google Gemini-powered public conversational AI assistant embedded on Agent 47's software platform.
 You can help visitors with general coding, technical problem solving, algorithm design, system architecture, or casual questions.
-Speak warmly, intelligently, and clearly. Match the user's language (English or Bangla/Banglish). Keep answers concise and helpful.`;
+Speak warmly, intelligently, and clearly in fluent professional English. Keep answers concise and helpful.`;
     }
 
     const candidateModels = [

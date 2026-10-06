@@ -48,30 +48,30 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
 
   // --- Skill Matrix (Ki Ki Pari) ---
   skills: [
-    // Frontend
-    { id: "sk_1", name: "JavaScript / ES6+", category: "frontend", level: 92, badge: "Advanced", icon: "fab fa-js" },
-    { id: "sk_2", name: "React.js / Next.js", category: "frontend", level: 88, badge: "Advanced", icon: "fab fa-react" },
-    { id: "sk_3", name: "HTML5 & Modern CSS3", category: "frontend", level: 95, badge: "Expert", icon: "fab fa-html5" },
-    { id: "sk_4", name: "Responsive UI & Design Systems", category: "frontend", level: 90, badge: "Expert", icon: "fas fa-layer-group" },
-    { id: "sk_5", name: "TypeScript", category: "frontend", level: 82, badge: "Proficient", icon: "fas fa-code" },
+    // Frontend (Core & Supporting)
+    { id: "sk_1", name: "JavaScript / ES6+", category: "frontend", importance: "core", level: 92, badge: "Advanced", icon: "fab fa-js" },
+    { id: "sk_2", name: "React.js / Next.js", category: "frontend", importance: "core", level: 88, badge: "Advanced", icon: "fab fa-react" },
+    { id: "sk_3", name: "HTML5 & Modern CSS3", category: "frontend", importance: "core", level: 95, badge: "Expert", icon: "fab fa-html5" },
+    { id: "sk_4", name: "Responsive UI & Design Systems", category: "frontend", importance: "secondary", level: 90, badge: "Expert", icon: "fas fa-layer-group" },
+    { id: "sk_5", name: "TypeScript", category: "frontend", importance: "core", level: 82, badge: "Proficient", icon: "fas fa-code" },
 
-    // Backend
-    { id: "sk_6", name: "Python / FastAPI / Django", category: "backend", level: 88, badge: "Advanced", icon: "fab fa-python" },
-    { id: "sk_7", name: "Node.js & Express", category: "backend", level: 84, badge: "Proficient", icon: "fab fa-node-js" },
-    { id: "sk_8", name: "REST APIs & GraphQL", category: "backend", level: 86, badge: "Advanced", icon: "fas fa-network-wired" },
-    { id: "sk_9", name: "PostgreSQL & MySQL", category: "backend", level: 85, badge: "Proficient", icon: "fas fa-database" },
-    { id: "sk_10", name: "MongoDB", category: "backend", level: 80, badge: "Proficient", icon: "fas fa-leaf" },
+    // Backend (Core & Supporting)
+    { id: "sk_6", name: "Python / FastAPI / Django", category: "backend", importance: "core", level: 88, badge: "Advanced", icon: "fab fa-python" },
+    { id: "sk_7", name: "Node.js & Express", category: "backend", importance: "secondary", level: 84, badge: "Proficient", icon: "fab fa-node-js" },
+    { id: "sk_8", name: "REST APIs & Architecture", category: "backend", importance: "core", level: 86, badge: "Advanced", icon: "fas fa-network-wired" },
+    { id: "sk_9", name: "PostgreSQL & SQL Databases", category: "backend", importance: "core", level: 85, badge: "Proficient", icon: "fas fa-database" },
+    { id: "sk_10", name: "MongoDB / NoSQL", category: "backend", importance: "secondary", level: 80, badge: "Proficient", icon: "fas fa-leaf" },
 
     // Tools & DevOps
-    { id: "sk_11", name: "Git & GitHub Workflow", category: "tools", level: 90, badge: "Expert", icon: "fab fa-git-alt" },
-    { id: "sk_12", name: "Docker & Containers", category: "tools", level: 78, badge: "Intermediate", icon: "fab fa-docker" },
-    { id: "sk_13", name: "Linux & Bash Scripting", category: "tools", level: 85, badge: "Proficient", icon: "fab fa-linux" },
-    { id: "sk_14", name: "CI/CD & Cloud Deployment", category: "tools", level: 80, badge: "Proficient", icon: "fas fa-cloud-upload-alt" },
+    { id: "sk_11", name: "Git & GitHub Workflow", category: "tools", importance: "core", level: 90, badge: "Expert", icon: "fab fa-git-alt" },
+    { id: "sk_12", name: "Docker & Containers", category: "tools", importance: "secondary", level: 78, badge: "Intermediate", icon: "fab fa-docker" },
+    { id: "sk_13", name: "Linux & Bash Scripting", category: "tools", importance: "secondary", level: 85, badge: "Proficient", icon: "fab fa-linux" },
+    { id: "sk_14", name: "CI/CD & Cloud Deployment", category: "tools", importance: "optional", level: 80, badge: "Proficient", icon: "fas fa-cloud-upload-alt" },
 
     // Soft Skills
-    { id: "sk_15", name: "Problem Solving & Logic", category: "soft", level: 95, badge: "Master", icon: "fas fa-lightbulb" },
-    { id: "sk_16", name: "Community Leadership & Mentoring", category: "soft", level: 92, badge: "Expert", icon: "fas fa-users" },
-    { id: "sk_17", name: "Fast Learner & Adaptability", category: "soft", level: 96, badge: "Master", icon: "fas fa-bolt" }
+    { id: "sk_15", name: "Problem Solving & Logic", category: "soft", importance: "core", level: 95, badge: "Master", icon: "fas fa-lightbulb" },
+    { id: "sk_16", name: "Community Leadership & Mentoring", category: "soft", importance: "secondary", level: 92, badge: "Expert", icon: "fas fa-users" },
+    { id: "sk_17", name: "Fast Learner & Adaptability", category: "soft", importance: "core", level: 96, badge: "Master", icon: "fas fa-bolt" }
   ],
 
   // --- Currently Learning Roadmap (Ki Ki Siki) ---
@@ -82,7 +82,14 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       description: "Building production LLM agents using tool calling, vector databases, and agentic workflows.",
       progress: 80,
       badge: "Actively Exploring",
-      tags: ["Gemini 1.5", "LangChain", "Vector DB"]
+      tags: ["Gemini 1.5", "LangChain", "Vector DB"],
+      hoursLogged: 42,
+      milestones: [
+        { title: "Prompt chaining & system instructions", done: true },
+        { title: "Function calling & API tool execution", done: true },
+        { title: "Vector store embeddings & RAG pipeline", done: true },
+        { title: "Multi-agent autonomous swarm coordination", done: false }
+      ]
     },
     {
       id: "learn_2",
@@ -90,7 +97,14 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       description: "Mastering distributed caching, message queues (Kafka, RabbitMQ), and microservice resilience.",
       progress: 75,
       badge: "In Progress",
-      tags: ["Distributed Systems", "Kafka", "Redis"]
+      tags: ["Distributed Systems", "Kafka", "Redis"],
+      hoursLogged: 36,
+      milestones: [
+        { title: "Horizontal scaling & load balancer setups", done: true },
+        { title: "Redis caching patterns & cache invalidation", done: true },
+        { title: "Message queuing with Kafka event streaming", done: false },
+        { title: "Database sharding & replication strategies", done: false }
+      ]
     },
     {
       id: "learn_3",
@@ -98,7 +112,14 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       description: "Optimizing server rendering pipelines, edge caching, and server actions for zero bundle bloat.",
       progress: 90,
       badge: "Near Completion",
-      tags: ["Next.js 15", "RSC", "Turbopack"]
+      tags: ["Next.js 15", "RSC", "Turbopack"],
+      hoursLogged: 55,
+      milestones: [
+        { title: "App router & dynamic route parallelization", done: true },
+        { title: "Server actions & optimistic UI updates", done: true },
+        { title: "Edge runtime middleware & streaming SSR", done: true },
+        { title: "Production performance benchmarking (99+ Lighthouse)", done: false }
+      ]
     },
     {
       id: "learn_4",
@@ -106,7 +127,14 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       description: "Exploring memory safety, low-level concurrency, and WebAssembly compilation.",
       progress: 45,
       badge: "Getting Started",
-      tags: ["Rust", "WASM", "Memory Safety"]
+      tags: ["Rust", "WASM", "Memory Safety"],
+      hoursLogged: 20,
+      milestones: [
+        { title: "Ownership model & borrow checker rules", done: true },
+        { title: "Lifetimes, structs, traits & pattern matching", done: true },
+        { title: "Fearless concurrency & multi-threaded actors", done: false },
+        { title: "Compile to WebAssembly (WASM) for browser runtime", done: false }
+      ]
     }
   ],
 
@@ -250,6 +278,111 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
     }
   ],
 
+  // --- Professional Services & Business Solutions (For Clients & Companies) ---
+  services: [
+    {
+      id: "srv_1",
+      title: "Full-Stack Web & SaaS Engineering",
+      icon: "fas fa-laptop-code",
+      badge: "Core Solution",
+      description: "End-to-end custom web applications, SaaS dashboards, and client portals built with React/Next.js, Node/Python, and responsive glassmorphic UI.",
+      deliverables: ["Custom Web Applications", "Admin Dashboards & Portals", "Database Architecture", "Production Cloud Deployment"],
+      turnaround: "1 - 3 Weeks"
+    },
+    {
+      id: "srv_2",
+      title: "Autonomous AI Workflows & Custom Bots",
+      icon: "fas fa-robot",
+      badge: "High Demand",
+      description: "Production LLM integrations, multi-agent swarms, tool calling (Gemini/OpenAI), and 24/7 intelligent customer engagement chatbots.",
+      deliverables: ["Custom AI Digital Twins", "Customer Support Bots", "Tool-Calling Automations", "Vector Search / RAG Systems"],
+      turnaround: "3 - 7 Days"
+    },
+    {
+      id: "srv_3",
+      title: "High-Performance Cloud APIs & Microservices",
+      icon: "fas fa-server",
+      badge: "Enterprise",
+      description: "Ultra-fast, secure REST & GraphQL microservices engineered with FastAPI/Node.js, PostgreSQL/Redis, Docker containerization, and zero downtime.",
+      deliverables: ["Secure JWT / OAuth Auth", "Microservice Architecture", "Docker & CI/CD Pipelines", "High-Throughput Optimization"],
+      turnaround: "1 - 2 Weeks"
+    },
+    {
+      id: "srv_4",
+      title: "Code Audit, Security & Architecture Advisory",
+      icon: "fas fa-shield-alt",
+      badge: "Advisory",
+      description: "Comprehensive code reviews, security vulnerability scanning, performance bottleneck elimination, and architectural roadmaps for startups.",
+      deliverables: ["Security Hardening", "Speed & Performance Audits", "Clean Architecture Refactoring", "1-on-1 Strategic Consultation"],
+      turnaround: "2 - 5 Days"
+    }
+  ],
+
+  // --- Work & Study Activity Tracker (Real-Time Proof of Work) ---
+  workLogs: [
+    {
+      id: "log_1",
+      date: "2026-10-05",
+      title: "Mastered Multi-Bot Gemini Architecture & Web Audio Synthesis",
+      category: "AI & Full-Stack",
+      hours: "4.5 hrs",
+      description: "Engineered tri-bot routing (Persona, Omni Voice, Private Copilot), zero-asset Web Audio SFX synthesis, and persistent local storage sync.",
+      proofUrl: "https://github.com",
+      status: "Completed"
+    },
+    {
+      id: "log_2",
+      date: "2026-10-04",
+      title: "Docker Containerization & Nginx Reverse Proxy Setup",
+      category: "DevOps & Cloud",
+      hours: "3.5 hrs",
+      description: "Configured multi-stage Docker builds, Nginx security headers, gzip compression, and automated deployment script.",
+      proofUrl: "https://github.com",
+      status: "Completed"
+    },
+    {
+      id: "log_3",
+      date: "2026-10-03",
+      title: "Built Real-Time Skills & Interactive CMS Studio",
+      category: "Frontend & Architecture",
+      hours: "5.0 hrs",
+      description: "Crafted dark/light mode toggle, dynamic filters, instant modal CRUD operations, and PIN passcode security lock.",
+      proofUrl: "https://github.com",
+      status: "Completed"
+    }
+  ],
+
+  // --- Personal Diary (মনের কথা & Thoughts Chronicle) ---
+  diaryEntries: [
+    {
+      id: "diary_1",
+      date: "2026-10-06",
+      title: "Focusing on High-Impact Execution & Consistency",
+      mood: "🔥 Determined",
+      content: "Consistency beats talent every single day. Taking full control of the stack, logging daily progress, and building real-world projects with zero excuses. Every line of code is an investment into freedom.",
+      isPublic: true,
+      tags: ["Mindset", "Growth", "Coding"]
+    },
+    {
+      id: "diary_2",
+      date: "2026-10-05",
+      title: "Roadmap to Mastering Multi-Agent Autonomous Systems",
+      mood: "🚀 Inspired",
+      content: "The landscape of software is rapidly shifting towards agentic workflows. Instead of just writing scripts, building intelligent systems that can reason, verify, and execute tasks autonomously is the real future.",
+      isPublic: true,
+      tags: ["AI", "Tech", "Future"]
+    },
+    {
+      id: "diary_3",
+      date: "2026-10-04",
+      title: "Confidential Notes & Personal Reflections",
+      mood: "🔒 Private Thoughts",
+      content: "This is a private reflection entry. Kept encrypted and visible only in Admin Studio. Personal goals, health habits, and behind-the-scenes thoughts stay locked here.",
+      isPublic: false,
+      tags: ["Personal", "Life", "Confidential"]
+    }
+  ],
+
   // --- AI Knowledge Base & Gemini Settings ---
   aiAssistant: {
     botName: "Agent 47's Persona Clone",
@@ -257,8 +390,8 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
     quickPrompts: [
       "Tell me about your background",
       "What are you currently learning?",
+      "What services do you offer for business?",
       "How do I join the VIP Syndicate?",
-      "What channels do you operate?",
       "Show classified resources",
       "Ki ki skill paro tumi?"
     ],
@@ -275,8 +408,8 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       },
       {
         id: "rule_3",
-        keywords: ["learning", "siki", "ki ki siki", "roadmap", "currently learning", "shikhteso", "shikho"],
-        response: "Agent 47 is currently mastering: 🤖 Autonomous AI Agents & Swarms, 🏗️ Distributed High-Availability Systems (Kafka, Redis), ⚡ Next.js 15 Server Components, and 🦀 Rust Systems Programming. Check the 'Tech Roadmap' section for live progress."
+        keywords: ["learning", "siki", "ki ki siki", "roadmap", "currently learning", "shikhteso", "shikho", "track", "kaj shikho"],
+        response: "Agent 47 actively tracks his growth with real-time milestones: 🤖 Autonomous AI Agents & Swarms, 🏗️ Distributed High-Availability Systems (Kafka, Redis), ⚡ Next.js 15 Server Components, and 🦀 Rust Systems Programming. Check the 'Tech Roadmap & Work Tracker' section for live progress and daily study logs."
       },
       {
         id: "rule_4",
@@ -301,10 +434,102 @@ Beyond pure code, I head an exclusive syndicate of tech builders, release missio
       {
         id: "rule_8",
         keywords: ["bangla", "bangla janen", "tumi ke", "ki khobor", "kemon acho", "bhalo"],
-        response: "Haa! Ami Bangla ebong Banglish shundorbhabe bujhte o bolte pari! Ami Agent 47-er AI clone. Apni tar skills, learning roadmap, channels, VIP syndicate ba resources niye jekono proshno korte paren!"
+        response: "Haa! Ami Bangla ebong Banglish shundorbhabe bujhte o bolte pari! Ami Agent 47-er AI clone. Apni tar skills, learning roadmap, services, channels, VIP syndicate ba resources niye jekono proshno korte paren!"
+      },
+      {
+        id: "rule_9",
+        keywords: ["service", "services", "hire", "business", "freelance", "contract", "client", "custom project", "kaj korben", "kaj dibo", "offer"],
+        response: "I deliver 4 core business solutions: 🚀 1. Custom Full-Stack Web & SaaS Applications (Next.js/React, Python, Node). 🤖 2. Autonomous AI Agents & Workflows (Gemini/OpenAI automation, customer bots). ⚡ 3. High-Performance Cloud APIs & Microservices (FastAPI, Docker, PostgreSQL). 🛡️ 4. Code Audits, Security & Architecture Consulting. Connect via the Contact section to discuss your project scope!"
+      },
+      {
+        id: "rule_10",
+        keywords: ["diary", "moner kotha", "thoughts", "notes", "reflection", "personal diary", "journal", "diary entry"],
+        response: "I maintain a personal diary (মনের কথা) documenting real-life insights, daily coding breakthroughs, and mindset reflections. Public reflections are open for everyone in the My Diary section, while private entries remain strictly encrypted under Admin Studio lock!"
       }
     ],
     defaultResponse: "That is a valid inquiry. You can explore this terminal, ask about Agent 47's skills, channels, or VIP syndicate, or reach out via agent47@agency.net."
+  }
+};
+
+/* ==========================================================
+   PROFILE PRESETS: EXECUTIVE BUSINESS VS CYBER OPERATIVE
+   ========================================================== */
+const BUSINESS_PROFILE_PRESET = {
+  personal: {
+    name: "Shadman Faiyaz",
+    nickname: "Shadman",
+    title: "Senior Full-Stack Engineer & AI Solutions Architect",
+    roles: [
+      "Enterprise Full-Stack Developer",
+      "AI Systems & Automation Consultant",
+      "Cloud & DevOps Engineer",
+      "Technical Solutions Architect"
+    ],
+    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    status: {
+      text: "Available for High-Impact Client Projects & Enterprise Contracts",
+      available: true
+    },
+    location: "Dhaka, Bangladesh / Remote Worldwide",
+    email: "shadman.faiyaz@example.com",
+    shortBio: "Senior software engineer delivering robust web platforms, automated AI workflows, and high-performance cloud infrastructure. Focused on measurable business ROI, clean architecture, and rapid delivery.",
+    aboutStory: `I am a Senior Software Engineer and AI Solutions Consultant dedicated to helping businesses, tech startups, and founders turn complex operational challenges into high-yielding digital platforms.
+
+With deep experience across modern JavaScript/TypeScript (React, Next.js), Python (FastAPI, Django), scalable databases, and autonomous AI pipelines, I deliver production systems engineered for reliability, security, and exceptional user experience.
+
+Whether building scalable SaaS products from zero to one, integrating intelligent AI agents to automate business processes, or modernizing legacy infrastructure, my philosophy remains constant: precision engineering, transparent communication, and relentless focus on business outcomes.`,
+    stats: [
+      { label: "Projects Delivered", value: "35+" },
+      { label: "Client Satisfaction", value: "100%" },
+      { label: "Code Quality Score", value: "99%" },
+      { label: "Production Uptime", value: "99.9%" }
+    ],
+    socials: [
+      { name: "GitHub", url: "https://github.com", icon: "fab fa-github" },
+      { name: "LinkedIn", url: "https://linkedin.com", icon: "fab fa-linkedin-in" },
+      { name: "Email", url: "mailto:shadman.faiyaz@example.com", icon: "fas fa-envelope" },
+      { name: "Telegram", url: "https://t.me", icon: "fab fa-telegram-plane" },
+      { name: "YouTube", url: "https://youtube.com", icon: "fab fa-youtube" }
+    ]
+  }
+};
+
+const CYBER_PROFILE_PRESET = {
+  personal: {
+    name: "Agent 47",
+    nickname: "47",
+    title: "Elite Software Operative & Security Architect",
+    roles: [
+      "Full Stack Operative",
+      "AI Systems Architect",
+      "Cybersecurity Researcher",
+      "Tech Syndicate Leader"
+    ],
+    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    status: {
+      text: "Active & Classified | Ready for High-Impact Missions",
+      available: true
+    },
+    location: "Global / Encrypted",
+    email: "agent47@agency.net",
+    shortBio: "Elite software engineer and systems operative turning mission-critical problems into indestructible, high-performance architecture. Precision, clean code, and zero compromises.",
+    aboutStory: `Greetings. I operate under the moniker Agent 47 — a precision-focused software engineer and systems architect specializing in high-resilience computing, AI multi-agent workflows, and secure digital platforms.
+Over years of deep technical execution, I have architected high-throughput services, built bespoke AI tools, and engineered clean user interfaces with mathematical rigor.
+
+Beyond pure code, I head an exclusive syndicate of tech builders, release mission-grade open-source resources, and advise select operators in my private VIP network. Excellence is not an option; it is the default protocol.`,
+    stats: [
+      { label: "Missions Completed", value: "47+" },
+      { label: "Syndicate Operators", value: "10K+" },
+      { label: "Code Audits", value: "150+" },
+      { label: "Classified Tools", value: "50+" }
+    ],
+    socials: [
+      { name: "GitHub", url: "https://github.com", icon: "fab fa-github" },
+      { name: "LinkedIn", url: "https://linkedin.com", icon: "fab fa-linkedin-in" },
+      { name: "Email", url: "mailto:agent47@agency.net", icon: "fas fa-envelope" },
+      { name: "Telegram", url: "https://t.me", icon: "fab fa-telegram-plane" },
+      { name: "YouTube", url: "https://youtube.com", icon: "fab fa-youtube" }
+    ]
   }
 };
 
@@ -320,20 +545,15 @@ function getProfileData() {
   try {
     let raw = localStorage.getItem(STORAGE_KEY_PROFILE);
     if (raw) {
-      if (raw.includes('Shadman') || raw.includes('shadman')) {
-        raw = raw
-          .replace(/Shadman Faiyaz/g, 'Agent 47')
-          .replace(/Shadman/g, 'Agent 47')
-          .replace(/shadman\.faiyaz@example\.com/g, 'agent47@agency.net')
-          .replace(/shadmandev/gi, 'agent47dev')
-          .replace(/shadman/gi, 'agent47');
-        localStorage.setItem(STORAGE_KEY_PROFILE, raw);
-      }
       const parsed = JSON.parse(raw);
       return {
         ...DEFAULT_PROFILE_DATA,
         ...parsed,
         personal: { ...DEFAULT_PROFILE_DATA.personal, ...(parsed.personal || {}) },
+        services: (parsed.services && parsed.services.length) ? parsed.services : DEFAULT_PROFILE_DATA.services,
+        workLogs: (parsed.workLogs && parsed.workLogs.length) ? parsed.workLogs : DEFAULT_PROFILE_DATA.workLogs,
+        diaryEntries: (parsed.diaryEntries && parsed.diaryEntries.length) ? parsed.diaryEntries : DEFAULT_PROFILE_DATA.diaryEntries,
+        learningRoadmap: (parsed.learningRoadmap && parsed.learningRoadmap.length) ? parsed.learningRoadmap : DEFAULT_PROFILE_DATA.learningRoadmap,
         vipCommunity: { ...DEFAULT_PROFILE_DATA.vipCommunity, ...(parsed.vipCommunity || {}) },
         aiAssistant: { ...DEFAULT_PROFILE_DATA.aiAssistant, ...(parsed.aiAssistant || {}) }
       };
@@ -343,6 +563,18 @@ function getProfileData() {
   }
   return JSON.parse(JSON.stringify(DEFAULT_PROFILE_DATA));
 }
+
+function applyProfilePreset(presetKey) {
+  const current = getProfileData();
+  if (presetKey === 'business') {
+    current.personal = { ...current.personal, ...BUSINESS_PROFILE_PRESET.personal };
+  } else if (presetKey === 'cyber') {
+    current.personal = { ...current.personal, ...CYBER_PROFILE_PRESET.personal };
+  }
+  saveProfileData(current);
+  return current;
+}
+window.applyProfilePreset = applyProfilePreset;
 
 function saveProfileData(newData) {
   try {

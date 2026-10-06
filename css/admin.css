@@ -394,12 +394,13 @@ body {
 }
 
 .pin-input-wrap {
+  position: relative;
   margin-bottom: 20px;
 }
 
 .pin-input {
   width: 100%;
-  padding: 14px;
+  padding: 14px 44px 14px 14px;
   text-align: center;
   font-size: 1.5rem;
   letter-spacing: 0.3em;
@@ -412,9 +413,39 @@ body {
   transition: var(--transition);
 }
 
+.pin-toggle-visibility {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.pin-toggle-visibility:hover {
+  color: var(--secondary);
+}
+
 .pin-input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.pin-box.shake {
+  animation: pinBoxShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes pinBoxShake {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
+  40%, 60% { transform: translate3d(7px, 0, 0); }
 }
 
 .pin-btn {
@@ -1014,10 +1045,67 @@ textarea.form-control {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* Mobile Responsiveness */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 6px;
+}
+
+.admin-sidebar-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--admin-border);
+  color: var(--text-main);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.admin-sidebar-toggle:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.admin-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.admin-sidebar-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ==========================================================
+   MOBILE & TABLET RESPONSIVENESS (ALL DEVICES)
+   ========================================================== */
 @media (max-width: 900px) {
+  .admin-sidebar-toggle {
+    display: flex;
+  }
+
   .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.65);
     transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .admin-sidebar.mobile-open {
@@ -1026,9 +1114,311 @@ textarea.form-control {
 
   .admin-main {
     margin-left: 0;
+    width: 100%;
+  }
+
+  .admin-header {
+    padding: 0 16px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   }
 
   .form-grid-2 {
     grid-template-columns: 1fr;
   }
+
+  #copilot-chat-box {
+    height: 320px !important;
+  }
 }
+
+@media (max-width: 600px) {
+  .admin-header {
+    height: auto;
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-left-wrap {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .header-title-group h1 {
+    font-size: 1.15rem;
+  }
+
+  .header-title-group p {
+    font-size: 0.75rem;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .btn-header {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .admin-body {
+    padding: 14px 10px;
+  }
+
+  .admin-card {
+    padding: 16px 12px;
+  }
+
+  .admin-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .admin-card-title {
+    font-size: 1.05rem;
+  }
+
+  .modal-box {
+    width: 95vw;
+    max-width: 95vw;
+    padding: 18px 14px;
+    max-height: 92vh;
+  }
+
+  .pin-box {
+    width: 92vw;
+    max-width: 360px;
+    padding: 24px 16px;
+  }
+
+  .pin-input {
+    font-size: 1.25rem;
+    letter-spacing: 0.2em;
+    padding: 12px 38px 12px 12px;
+  }
+
+  .toast {
+    min-width: 260px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================================
+   ADMIN DIARY & PERSONAL REFLECTIONS (মনের কথা) STYLING
+   ========================================================== */
+.diary-admin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.diary-stat-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.diary-stat-num {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #c084fc;
+  font-family: var(--font-heading);
+}
+
+.diary-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.diary-admin-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.diary-admin-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.diary-admin-tab {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diary-admin-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.diary-admin-tab.active {
+  background: #a855f7;
+  color: #ffffff;
+  border-color: #a855f7;
+}
+
+.diary-admin-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 6px 14px;
+  min-width: 280px;
+}
+
+.diary-admin-search-box i {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.diary-admin-search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.diary-admin-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diary-admin-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.diary-admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.diary-admin-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.diary-admin-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diary-admin-badge-public {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.diary-admin-badge-private {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.diary-admin-content-preview {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.diary-admin-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.diary-admin-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.diary-admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-privacy-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.btn-privacy-toggle:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  color: #d8b4fe;
+}
+

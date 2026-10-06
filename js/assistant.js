@@ -23,6 +23,7 @@ function initAIAssistant() {
   const botStatusIndicator = document.getElementById('bot-status-indicator');
   const botTitleText = document.getElementById('chat-bot-title-text');
   const botAvatarIcon = document.getElementById('chat-bot-avatar-icon');
+  const clearChatBtn = document.getElementById('chat-clear-btn');
 
   // Mode tabs & Voice buttons
   const tabPersona = document.getElementById('tab-bot-persona');
@@ -77,7 +78,9 @@ function initAIAssistant() {
         console.warn('Speech start error:', e);
       }
     } else if (!recognition) {
-      alert('Speech Recognition is not supported by your browser. Please use Chrome or Edge.');
+      if (window.showPublicToast) {
+        showPublicToast('Speech Recognition not supported by this browser. Use Chrome or Edge.', 'warning');
+      }
     }
   }
 
@@ -274,10 +277,25 @@ function initAIAssistant() {
   }
 
   function formatChatText(raw) {
-    return raw
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    if (!raw) return '';
+    let escaped = raw
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Code blocks
+    escaped = escaped.replace(/```([a-zA-Z]*)\n?([\s\S]*?)```/g, (m, lang, code) => {
+      return `<pre class="chat-code-block" style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; overflow-x: auto; margin: 8px 0; border: 1px solid rgba(255,255,255,0.1); font-family: monospace;"><code>${code.trim()}</code></pre>`;
+    });
+
+    // Inline code
+    escaped = escaped.replace(/`([^`]+)`/g, '<code style="background: rgba(0,240,255,0.15); color: #00f0ff; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.88em;">$1</code>');
+
+    // Bold & italic
+    escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    escaped = escaped.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    return escaped.replace(/\n/g, '<br>');
   }
 
   // Show Typing Indicator
@@ -436,6 +454,16 @@ Speak warmly, intelligently, and clearly. Match the user's language (English or 
         if (val) handleUserMessage(val);
       }
     });
+  }
+
+  if (clearChatBtn) {
+    clearChatBtn.onclick = () => {
+      if (window.CyberSFX) CyberSFX.click();
+      if (chatMessages) chatMessages.innerHTML = '';
+      const cfg = getProfileData().aiAssistant;
+      appendMessage(cfg?.greeting || 'Chat history cleared. How can I assist you?', 'bot');
+      if (window.showPublicToast) showPublicToast('Chat history cleared', 'info');
+    };
   }
 
   // Initial welcome message & default mode

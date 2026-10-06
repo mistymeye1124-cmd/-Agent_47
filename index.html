@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#070a13">
   
   <title>Agent 47 | Elite Operative & Software Architecture</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%23070a13'/%3E%3Cpath d='M30 35 L50 65 L70 35' stroke='%2300f0ff' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='65' r='6' fill='%236366f1'/%3E%3C/svg%3E">
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -21,9 +22,12 @@
   </script>
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.6">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
 </head>
 <body>
+
+  <!-- Futuristic Scroll Reading Progress Bar -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
 
   <!-- Cyber Matrix Rain Canvas Background -->
   <canvas id="matrix-canvas"></canvas>
@@ -36,7 +40,7 @@
   </div>
 
   <!-- Navigation Bar -->
-  <header class="navbar">
+  <header class="navbar" id="site-navbar">
     <div class="container nav-container">
       <a href="#" class="brand-logo" id="brand-logo-link">
         <div class="brand-avatar-mini">
@@ -50,28 +54,166 @@
       <ul class="nav-links">
         <li><a href="#hero" class="nav-link active">Home</a></li>
         <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
         <li><a href="#skills" class="nav-link">Skills</a></li>
         <li><a href="#learning" class="nav-link">Learning</a></li>
-        <li><a href="#resources" class="nav-link">Resources</a></li>
+        <li><a href="#diary" class="nav-link" style="color: #c084fc;"><i class="fas fa-book-open" style="font-size: 0.8rem; margin-right: 4px;"></i> Diary</a></li>
         <li><a href="#projects" class="nav-link">Projects</a></li>
-        <li><a href="#channels" class="nav-link">Channels</a></li>
-        <li><a href="#vip" class="nav-link" style="color: var(--gold); font-weight: 600;"><i class="fas fa-crown"></i> VIP</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
 
       <div class="nav-actions">
-        <!-- Light / Dark Theme Switcher Button -->
-        <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light / Dark Mode">
-          <i class="fas fa-moon" id="theme-toggle-icon"></i>
-        </button>
-
+        <!-- Ask AI Digital Twin Trigger Button -->
         <button class="btn-ai-trigger" id="nav-ai-trigger" title="Open AI Digital Twin Chat">
           <i class="fas fa-wand-magic-sparkles sparkle-icon"></i>
           <span>Ask My AI</span>
         </button>
+
+        <!-- 3-Dot Preferences & Quick Menu (Decluttered Header) -->
+        <div class="nav-more-wrapper" id="nav-more-wrapper">
+          <button class="nav-dots-btn" id="nav-dots-btn" aria-label="More Options & Preferences" title="Settings & Quick Hub (3-Dot Menu)">
+            <i class="fas fa-ellipsis-vertical"></i>
+          </button>
+          
+          <div class="nav-more-dropdown" id="nav-dots-dropdown">
+            <div class="nav-dropdown-header">
+              <span class="dropdown-title"><i class="fas fa-sliders-h"></i> Quick Controls</span>
+              <span class="dropdown-badge">v3.5</span>
+            </div>
+
+            <!-- Interactive Quick Toggle Switches -->
+            <div class="dropdown-quick-switches">
+              <button class="dropdown-switch-item" id="sfx-toggle-btn" title="Toggle Cyber Audio SFX (Clicks & Audio Feedback)">
+                <div class="switch-item-left">
+                  <div class="switch-icon-box">
+                    <i class="fas fa-volume-mute" id="sfx-toggle-icon"></i>
+                  </div>
+                  <div class="switch-item-text">
+                    <span class="switch-title">Cyber Audio SFX</span>
+                    <span class="switch-subtitle" id="sfx-status-text">Muted</span>
+                  </div>
+                </div>
+                <span class="switch-pill" id="sfx-pill-badge">OFF</span>
+              </button>
+
+              <button class="dropdown-switch-item" id="theme-toggle-btn" title="Toggle Light / Dark Mode">
+                <div class="switch-item-left">
+                  <div class="switch-icon-box">
+                    <i class="fas fa-moon" id="theme-toggle-icon"></i>
+                  </div>
+                  <div class="switch-item-text">
+                    <span class="switch-title">Appearance Mode</span>
+                    <span class="switch-subtitle" id="theme-status-text">Dark Cyber</span>
+                  </div>
+                </div>
+                <span class="switch-pill" id="theme-pill-badge">DARK</span>
+              </button>
+            </div>
+
+            <div class="nav-dropdown-divider"></div>
+
+            <div class="dropdown-links-list">
+              <a href="#diary" class="dropdown-nav-row" id="dot-link-diary">
+                <div class="nav-row-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">
+                  <i class="fas fa-book-bookmark"></i>
+                </div>
+                <div class="nav-row-text">
+                  <span class="row-title">My Diary (মনের কথা)</span>
+                  <span class="row-subtitle">Personal reflections & notes</span>
+                </div>
+                <span class="row-badge" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">NEW</span>
+              </a>
+
+              <a href="#vip" class="dropdown-nav-row">
+                <div class="nav-row-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+                  <i class="fas fa-crown"></i>
+                </div>
+                <div class="nav-row-text">
+                  <span class="row-title">VIP Syndicate Club</span>
+                  <span class="row-subtitle">Invite-only advisory</span>
+                </div>
+                <span class="row-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">VIP</span>
+              </a>
+
+              <a href="#resources" class="dropdown-nav-row">
+                <div class="nav-row-icon" style="background: rgba(0, 240, 255, 0.15); color: #00f0ff;">
+                  <i class="fas fa-folder-open"></i>
+                </div>
+                <div class="nav-row-text">
+                  <span class="row-title">Classified Resources</span>
+                  <span class="row-subtitle">Guides & cheat sheets</span>
+                </div>
+              </a>
+
+              <a href="#channels" class="dropdown-nav-row">
+                <div class="nav-row-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                  <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div class="nav-row-text">
+                  <span class="row-title">Tactical Channels</span>
+                  <span class="row-subtitle">Telegram, Discord, YT</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="nav-dropdown-divider"></div>
+
+            <div class="dropdown-footer-action">
+              <a href="admin.html" class="dropdown-admin-link" target="_blank" title="Open Admin CMS Studio">
+                <i class="fas fa-user-shield"></i>
+                <span>Admin Studio (CMS Lock)</span>
+                <i class="fas fa-arrow-up-right-from-square" style="font-size: 0.75rem; margin-left: auto;"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation Hamburger -->
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle mobile navigation menu" title="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <div class="brand-logo">
+        <div class="brand-avatar-mini">
+          <i class="fas fa-terminal"></i>
+        </div>
+        <span class="brand-text">Agent 47</span>
+      </div>
+      <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close mobile menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-links">
+      <li><a href="#hero" class="mobile-nav-link active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#about" class="mobile-nav-link"><i class="fas fa-user-secret"></i> About</a></li>
+      <li><a href="#services" class="mobile-nav-link"><i class="fas fa-briefcase"></i> Services</a></li>
+      <li><a href="#skills" class="mobile-nav-link"><i class="fas fa-microchip"></i> Skills</a></li>
+      <li><a href="#learning" class="mobile-nav-link"><i class="fas fa-graduation-cap"></i> Learning</a></li>
+      <li><a href="#diary" class="mobile-nav-link" style="color: #c084fc;"><i class="fas fa-book-open"></i> My Diary (মনের কথা)</a></li>
+      <li><a href="#resources" class="mobile-nav-link"><i class="fas fa-folder-open"></i> Resources</a></li>
+      <li><a href="#projects" class="mobile-nav-link"><i class="fas fa-laptop-code"></i> Projects</a></li>
+      <li><a href="#channels" class="mobile-nav-link"><i class="fas fa-satellite-dish"></i> Channels</a></li>
+      <li><a href="#vip" class="mobile-nav-link vip-link"><i class="fas fa-crown"></i> VIP Syndicate</a></li>
+      <li><a href="#contact" class="mobile-nav-link"><i class="fas fa-paper-plane"></i> Contact</a></li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <button class="btn-primary" id="mobile-ai-trigger" style="width: 100%; justify-content: center;">
+        <i class="fas fa-wand-magic-sparkles"></i>
+        <span>Chat with My AI</span>
+      </button>
+    </div>
+  </aside>
 
   <!-- ==============================================
        SECTION 1: HERO & BIO (AMI KE)
@@ -191,6 +333,45 @@
   </section>
 
   <!-- ==============================================
+       SECTION: SERVICES & BUSINESS SOLUTIONS (WHAT I BUILD)
+       ============================================== -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Business Solutions</span>
+        <h2 class="section-title">Client Services & Solutions</h2>
+        <p class="section-subtitle">High-performance digital products, intelligent AI workflows, and enterprise systems built for ambitious businesses & founders.</p>
+      </div>
+
+      <!-- Dynamic Services Grid -->
+      <div class="services-grid" id="services-grid">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Business Value Reassurance Banner -->
+      <div class="business-cta-banner">
+        <div class="business-cta-content">
+          <div class="business-cta-badge">
+            <i class="fas fa-shield-check"></i> Enterprise Standard
+          </div>
+          <h3>Have a project in mind or need dedicated technical execution?</h3>
+          <p>Available for select freelance contracts, MVP builds, and architectural consulting. Fast execution, clean code, and zero compromises.</p>
+        </div>
+        <div class="business-cta-actions">
+          <a href="#contact" class="btn-primary" onclick="CyberSFX.click()">
+            <i class="fas fa-paper-plane"></i>
+            <span>Start a Project</span>
+          </a>
+          <button class="btn-secondary" id="services-ai-consult-btn" onclick="CyberSFX.click()">
+            <i class="fas fa-comments"></i>
+            <span>Consult via AI Bot</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
        SECTION 3: SKILLS MATRIX (KI KI PARI)
        ============================================== -->
   <section class="section" id="skills">
@@ -205,10 +386,12 @@
       <div class="skills-controls">
         <div class="skills-filter-tabs">
           <button class="filter-tab active" data-category="all">All Skills</button>
+          <button class="filter-tab" data-category="core" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);"><i class="fas fa-star"></i> Core Stack (Main)</button>
           <button class="filter-tab" data-category="frontend">Frontend</button>
           <button class="filter-tab" data-category="backend">Backend & DB</button>
           <button class="filter-tab" data-category="tools">Tools & DevOps</button>
-          <button class="filter-tab" data-category="soft">Soft Skills</button>
+          <button class="filter-tab" data-category="secondary">Supporting</button>
+          <button class="filter-tab" data-category="optional">Optional</button>
         </div>
 
         <div class="skills-search-box">
@@ -225,18 +408,105 @@
   </section>
 
   <!-- ==============================================
-       SECTION 4: CURRENTLY LEARNING (KI KI SIKI)
+       SECTION 4: LEARNING ROADMAP & LIVE WORK TRACKER
        ============================================== -->
   <section class="section" id="learning">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Continuous Growth</span>
-        <h2 class="section-title">What I Am Learning (Tech Roadmap)</h2>
-        <p class="section-subtitle">Real-time progress on new technologies, frameworks, and architectural paradigms I'm actively exploring.</p>
+        <span class="section-tag">Growth & Accountability</span>
+        <h2 class="section-title">Tech Roadmap & Work Tracker</h2>
+        <p class="section-subtitle">Real-time roadmap milestones, active skill acquisition, and verifiable work logs proving daily consistency and engineering velocity.</p>
       </div>
 
+      <!-- Quick Metrics Ribbon -->
+      <div class="tracker-metrics-ribbon" id="tracker-metrics-ribbon">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Roadmap Filters -->
+      <div class="skills-controls" style="margin-bottom: 24px;">
+        <div class="skills-filter-tabs" id="learning-filter-tabs">
+          <button class="filter-tab active" data-learn-cat="all">All Topics</button>
+          <button class="filter-tab" data-learn-cat="exploring">Actively Exploring</button>
+          <button class="filter-tab" data-learn-cat="progress">In Progress</button>
+          <button class="filter-tab" data-learn-cat="near">Near Completion</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Learning Roadmap Grid with Milestones -->
       <div class="learning-grid" id="learning-grid">
         <!-- Rendered dynamically -->
+      </div>
+
+      <!-- LIVE WORK & STUDY LOGS (DAILY PROOF OF WORK) -->
+      <div class="work-logs-section" id="work-logs-section">
+        <div class="work-logs-header">
+          <div>
+            <span class="section-tag" style="font-size: 0.72rem; margin-bottom: 6px;"><i class="fas fa-history"></i> Proof of Work</span>
+            <h3 class="work-logs-title">Recent Work & Study Activity Logs</h3>
+            <p class="work-logs-desc">Transparent daily/weekly execution records detailing technologies mastered, hours invested, and repository proofs.</p>
+          </div>
+          <div class="work-logs-badge">
+            <span class="status-dot"></span>
+            <span>Live Activity Stream</span>
+          </div>
+        </div>
+
+        <div class="work-logs-timeline" id="work-logs-timeline">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       SECTION: MY DIARY & PERSONAL REFLECTIONS (মনের কথা)
+       ============================================== -->
+  <section class="section" id="diary">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.35);">
+          <i class="fas fa-book-open"></i> Personal Chronicle
+        </span>
+        <h2 class="section-title">My Diary & Reflections (মনের কথা)</h2>
+        <p class="section-subtitle">Real thoughts, daily milestones, and engineering mindset notes. Only public entries are shown here; confidential reflections remain encrypted in Admin Studio.</p>
+      </div>
+
+      <!-- Diary Controls (Tag Filter & Search) -->
+      <div class="diary-controls">
+        <div class="skills-filter-tabs" id="diary-filter-tabs">
+          <button class="filter-tab active" data-diary-tag="all">All Thoughts</button>
+          <button class="filter-tab" data-diary-tag="Mindset">Mindset & Life</button>
+          <button class="filter-tab" data-diary-tag="Tech">Tech & Code</button>
+          <button class="filter-tab" data-diary-tag="Growth">Growth</button>
+        </div>
+
+        <div class="skills-search-box">
+          <i class="fas fa-search skills-search-icon"></i>
+          <input type="text" id="diary-search" class="skills-search-input" placeholder="Search thoughts or keywords..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Dynamic Public Diary Grid -->
+      <div class="diary-grid" id="diary-grid">
+        <!-- Rendered dynamically (ONLY isPublic: true) -->
+      </div>
+
+      <!-- Selective Privacy Protocol Card -->
+      <div class="diary-privacy-card">
+        <div class="privacy-card-info">
+          <div class="privacy-icon-badge">
+            <i class="fas fa-shield-halved"></i>
+          </div>
+          <div>
+            <h4 class="privacy-card-title">Encrypted Privacy Protection Active</h4>
+            <p class="privacy-card-desc">Write your thoughts without hesitation. You choose what is public (🌐 সবাই দেখবে) and what stays private (🔒 শুধুমাত্র আমি দেখবো). Private notes never leave your secure local storage.</p>
+          </div>
+        </div>
+        <a href="admin.html" class="diary-write-cta-btn" target="_blank">
+          <i class="fas fa-pen-fancy"></i>
+          <span>Open Diary in Admin</span>
+        </a>
       </div>
     </div>
   </section>
@@ -282,6 +552,21 @@
         <span class="section-tag">Portfolio</span>
         <h2 class="section-title">Featured Creations</h2>
         <p class="section-subtitle">A collection of software projects, tools, and digital solutions I've crafted.</p>
+      </div>
+
+      <!-- Controls: Category Tabs & Real-time Search -->
+      <div class="projects-controls">
+        <div class="skills-filter-tabs" id="projects-filter-tabs">
+          <button class="filter-tab active" data-proj-cat="all">All Projects</button>
+          <button class="filter-tab" data-proj-cat="AI">AI & Machine Learning</button>
+          <button class="filter-tab" data-proj-cat="Web">Web Applications</button>
+          <button class="filter-tab" data-proj-cat="Backend">Backend & Systems</button>
+        </div>
+
+        <div class="skills-search-box">
+          <i class="fas fa-search skills-search-icon"></i>
+          <input type="text" id="projects-search" class="skills-search-input" placeholder="Search projects or tags..." autocomplete="off">
+        </div>
       </div>
 
       <div class="projects-grid" id="projects-grid">
@@ -366,7 +651,12 @@
                 <i class="fas fa-envelope"></i>
               </div>
               <div class="contact-detail-text">
-                <span>Direct Email</span>
+                <div class="contact-label-row">
+                  <span>Direct Email</span>
+                  <button type="button" class="btn-copy-chip" id="btn-copy-email" title="Copy Email to Clipboard">
+                    <i class="fas fa-copy"></i> <span>Copy</span>
+                  </button>
+                </div>
                 <a href="mailto:agent47@agency.net" id="contact-email-val">agent47@agency.net</a>
               </div>
             </div>
@@ -424,6 +714,32 @@
     </div>
   </footer>
 
+  <!-- Floating Back to Top Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" title="Scroll to Top" aria-label="Scroll to Top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Modal: Read Full Diary Entry -->
+  <div class="diary-modal-backdrop" id="diary-reader-backdrop">
+    <div class="diary-modal-content" id="diary-reader-modal">
+      <div class="diary-modal-header">
+        <div class="diary-modal-meta">
+          <span class="diary-modal-date" id="diary-modal-date"><i class="fas fa-calendar-alt"></i> 2026-10-06</span>
+          <span class="diary-modal-mood" id="diary-modal-mood">🔥 Determined</span>
+        </div>
+        <button class="diary-modal-close" id="diary-modal-close" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <h3 class="diary-modal-title" id="diary-modal-title">Entry Title</h3>
+      <div class="diary-modal-tags" id="diary-modal-tags"></div>
+      <div class="diary-modal-body" id="diary-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Global HUD Toast Container -->
+  <div class="hud-toast-container" id="hud-toast-container"></div>
+
   <!-- Floating AI Assistant Launcher Button -->
   <button class="floating-assistant-btn" id="floating-assistant-btn" title="Open AI Assistant" aria-label="Open AI Assistant">
     <div class="assistant-btn-label">
@@ -459,9 +775,14 @@
           <span id="bot-status-indicator">Online &bull; Ready to help</span>
         </div>
       </div>
-      <button class="chat-close-btn" id="chat-close-btn" title="Close Chat" aria-label="Close Chat">
-        <i class="fas fa-times"></i>
-      </button>
+      <div class="chat-header-actions">
+        <button class="chat-header-btn" id="chat-clear-btn" title="Clear Chat History">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <button class="chat-close-btn" id="chat-close-btn" title="Close Chat" aria-label="Close Chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Message Bubble Stream -->
@@ -490,9 +811,9 @@
   </aside>
 
   <!-- Application Scripts -->
-  <script src="js/cyber-matrix.js?v=2.6"></script>
-  <script src="js/profile-data.js?v=2.6"></script>
-  <script src="js/app.js?v=2.6"></script>
-  <script src="js/assistant.js?v=2.6"></script>
+  <script src="js/cyber-matrix.js?v=3.0"></script>
+  <script src="js/profile-data.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
+  <script src="js/assistant.js?v=3.0"></script>
 </body>
 </html>

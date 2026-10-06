@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent 47 | Private Admin Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%23070a13'/%3E%3Cpath d='M30 35 L50 65 L70 35' stroke='%2300ff88' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='65' r='6' fill='%2300f0ff'/%3E%3C/svg%3E">
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -17,8 +18,8 @@
   </script>
 
   <!-- Custom Admin Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.6">
-  <link rel="stylesheet" href="css/admin.css?v=2.6">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/admin.css?v=3.0">
 </head>
 <body>
 
@@ -33,6 +34,9 @@
 
       <div class="pin-input-wrap">
         <input type="password" id="pin-input" class="pin-input" placeholder="••••" maxlength="12" autofocus autocomplete="off">
+        <button type="button" class="pin-toggle-visibility" id="pin-toggle-btn" title="Show/Hide Passcode">
+          <i class="fas fa-eye" id="pin-eye-icon"></i>
+        </button>
       </div>
 
       <button class="pin-btn" id="pin-submit-btn">
@@ -81,6 +85,14 @@
           <i class="fas fa-graduation-cap"></i>
           <span>Learning Roadmap</span>
         </div>
+      </div>
+
+      <div class="nav-item" data-view="view-diary">
+        <div class="nav-item-left">
+          <i class="fas fa-book-open" style="color: #c084fc;"></i>
+          <span>My Diary (মনের কথা)</span>
+        </div>
+        <span class="badge-tag" style="font-size: 0.65rem; background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3);">LOCK/UNLOCK</span>
       </div>
 
       <div class="nav-item" data-view="view-resources">
@@ -153,14 +165,22 @@
     </div>
   </aside>
 
+  <!-- Sidebar Backdrop Overlay for Mobile -->
+  <div class="admin-sidebar-backdrop" id="admin-sidebar-backdrop"></div>
+
   <!-- ADMIN MAIN CONTENT -->
   <main class="admin-main">
     
     <!-- Top Header -->
     <header class="admin-header">
-      <div class="header-title-group">
-        <h1 id="current-view-title">Dashboard Overview</h1>
-        <p id="current-view-desc">Live overview of your personal brand platform</p>
+      <div class="header-left-wrap">
+        <button class="admin-sidebar-toggle" id="admin-sidebar-toggle" aria-label="Toggle Navigation Sidebar" title="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="header-title-group">
+          <h1 id="current-view-title">Dashboard Overview</h1>
+          <p id="current-view-desc">Live overview of your personal brand platform</p>
+        </div>
       </div>
 
       <div class="header-actions">
@@ -252,6 +272,28 @@
 
       <!-- VIEW 2: BIO & PROFILE -->
       <section class="admin-view" id="view-bio">
+        <!-- 1-Click Identity Presets Bar -->
+        <div class="admin-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%); border-color: rgba(99, 102, 241, 0.35);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-magic" style="color: #00ff88;"></i> 1-Click Identity & Presentation Presets
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                Instantly switch between an ultra-professional enterprise business profile and the stealth cyber operative persona.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn-action" style="background: rgba(0, 255, 136, 0.18); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.4); font-weight: 600;" onclick="handleApplyPresetUI('business')">
+                <i class="fas fa-briefcase"></i> Load Business Executive Preset
+              </button>
+              <button type="button" class="btn-action" style="background: rgba(0, 240, 255, 0.18); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.4); font-weight: 600;" onclick="handleApplyPresetUI('cyber')">
+                <i class="fas fa-user-secret"></i> Load Cyber Operative Preset
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="admin-card">
           <div class="admin-card-header">
             <div>
@@ -340,6 +382,34 @@
             </button>
           </form>
         </div>
+
+        <!-- CLIENT SERVICES & BUSINESS SOLUTIONS CMS CARD -->
+        <div class="admin-card" style="margin-top: 30px;">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title"><i class="fas fa-handshake" style="color: var(--secondary);"></i> Client Services & Offerings</h3>
+              <p class="admin-card-desc">Manage the technical solutions, deliverables, and services you provide to clients and businesses</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddServiceModal()">
+              <i class="fas fa-plus"></i> Add New Service
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Service Title</th>
+                  <th>Badge</th>
+                  <th>Est. Turnaround</th>
+                  <th>Deliverables</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="services-table-body"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- VIEW 3: SKILLS MATRIX -->
@@ -355,28 +425,32 @@
             </button>
           </div>
 
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Skill Name</th>
-                <th>Category</th>
-                <th>Proficiency</th>
-                <th>Tier</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="skills-table-body"></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Skill Name</th>
+                  <th>Category</th>
+                  <th>Role / Priority</th>
+                  <th>Proficiency</th>
+                  <th>Tier</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="skills-table-body"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <!-- VIEW 4: LEARNING ROADMAP (KI KI SIKI) -->
+      <!-- VIEW 4: WORK & LEARNING TRACKER STUDIO -->
       <section class="admin-view" id="view-learning">
+        <!-- Card 1: Roadmap Goals & Milestones -->
         <div class="admin-card">
           <div class="admin-card-header">
             <div>
-              <h3 class="admin-card-title">Currently Learning Roadmap</h3>
-              <p class="admin-card-desc">Share technologies, frameworks, and subjects you are currently mastering</p>
+              <h3 class="admin-card-title"><i class="fas fa-graduation-cap" style="color: var(--primary);"></i> Learning Roadmap & Milestones</h3>
+              <p class="admin-card-desc">Track active skill acquisition, milestone checklists, and promote mastered goals directly to Skills or Projects</p>
             </div>
             <button class="btn-action btn-primary" onclick="openAddLearningModal()">
               <i class="fas fa-plus"></i> Add Learning Goal
@@ -384,6 +458,83 @@
           </div>
 
           <div id="learning-admin-list"></div>
+        </div>
+
+        <!-- Card 2: Daily Work & Study Journal -->
+        <div class="admin-card" style="margin-top: 30px;">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title"><i class="fas fa-history" style="color: #00ff88;"></i> Daily Work & Study Activity Journal</h3>
+              <p class="admin-card-desc">Log your daily progress, hours invested, code repositories, and proof of work</p>
+            </div>
+            <button class="btn-action btn-primary" style="background: rgba(0, 255, 136, 0.2); color: #00ff88; border-color: rgba(0, 255, 136, 0.4);" onclick="openAddWorkLogModal()">
+              <i class="fas fa-plus-circle"></i> Log Today's Work
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Hours</th>
+                  <th>Subject & Accomplishment</th>
+                  <th>Proof Link</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="work-logs-admin-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: MY DIARY & PERSONAL REFLECTIONS (মনের কথা) -->
+      <section class="admin-view" id="view-diary">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> My Diary & Personal Reflections (মনের কথা)</h3>
+              <p class="admin-card-desc">Write your personal thoughts, daily learnings, and life updates. Toggle visibility with 1-click between 🔒 Private (strictly admin only) and 🌐 Public (visible to everybody on your portfolio).</p>
+            </div>
+            <button class="btn-action btn-primary" onclick="openAddDiaryModal()" style="background: linear-gradient(135deg, #a855f7, #6366f1); border-color: rgba(168,85,247,0.4);">
+              <i class="fas fa-plus"></i> Write New Diary Entry
+            </button>
+          </div>
+
+          <!-- Diary Stats Cards -->
+          <div class="diary-admin-stats-row">
+            <div class="diary-stat-box">
+              <span class="diary-stat-num" id="diary-stat-total">0</span>
+              <span class="diary-stat-label">Total Reflections</span>
+            </div>
+            <div class="diary-stat-box" style="border-color: rgba(16, 185, 129, 0.35);">
+              <span class="diary-stat-num" style="color: #34d399;" id="diary-stat-public">0</span>
+              <span class="diary-stat-label">🌐 Public (সবাই দেখবে)</span>
+            </div>
+            <div class="diary-stat-box" style="border-color: rgba(239, 68, 68, 0.35);">
+              <span class="diary-stat-num" style="color: #f87171;" id="diary-stat-private">0</span>
+              <span class="diary-stat-label">🔒 Private (শুধুমাত্র আমি)</span>
+            </div>
+          </div>
+
+          <!-- Diary Filter Tabs & Search -->
+          <div class="diary-admin-controls">
+            <div class="diary-admin-tabs">
+              <button class="diary-admin-tab active" data-diary-admin-filter="all" onclick="filterDiaryAdmin('all')">All Entries</button>
+              <button class="diary-admin-tab" data-diary-admin-filter="public" onclick="filterDiaryAdmin('public')">🌐 Public Only</button>
+              <button class="diary-admin-tab" data-diary-admin-filter="private" onclick="filterDiaryAdmin('private')">🔒 Private Only</button>
+            </div>
+            <div class="diary-admin-search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="diary-admin-search" placeholder="Search by title, tag, or content..." oninput="handleDiaryAdminSearch(this.value)">
+            </div>
+          </div>
+
+          <!-- Diary Entries List -->
+          <div id="diary-admin-list"></div>
         </div>
       </section>
 
@@ -400,19 +551,21 @@
             </button>
           </div>
 
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Resource Title</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Size</th>
-                <th>Download Link</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="resources-table-body"></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Resource Title</th>
+                  <th>Category</th>
+                  <th>Type</th>
+                  <th>Size</th>
+                  <th>Download Link</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="resources-table-body"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -592,18 +745,20 @@
             </div>
           </div>
 
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Sender Name</th>
-                <th>Email</th>
-                <th>Message Snippet</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="messages-table-body"></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Sender Name</th>
+                  <th>Email</th>
+                  <th>Message Snippet</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messages-table-body"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -811,9 +966,18 @@
           </div>
 
           <div class="form-field">
-            <label class="form-label">Badge Tier</label>
-            <input type="text" id="skill-badge" class="form-control" placeholder="e.g. Expert, Advanced" required>
+            <label class="form-label">Role in Career / Arsenal</label>
+            <select id="skill-importance" class="form-control" required>
+              <option value="core">🌟 Core Stack (Main Weapon)</option>
+              <option value="secondary">🛠️ Supporting Stack (Secondary)</option>
+              <option value="optional">🔮 Optional / Exploring</option>
+            </select>
           </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Badge Tier</label>
+          <input type="text" id="skill-badge" class="form-control" placeholder="e.g. Expert, Advanced, Proficient" required>
         </div>
 
         <div class="form-field">
@@ -846,7 +1010,7 @@
 
         <div class="form-field">
           <label class="form-label">Description / Summary</label>
-          <textarea id="learn-desc" class="form-control" rows="3" placeholder="What are you building or mastering in this topic?" required></textarea>
+          <textarea id="learn-desc" class="form-control" rows="2" placeholder="What are you building or mastering in this topic?" required></textarea>
         </div>
 
         <div class="form-grid-2">
@@ -856,9 +1020,14 @@
           </div>
 
           <div class="form-field">
-            <label class="form-label">Progress: <span id="learn-progress-val" style="color: var(--secondary);">75%</span></label>
-            <input type="range" id="learn-progress" min="5" max="100" value="75" style="width: 100%; accent-color: var(--secondary);">
+            <label class="form-label">Hours Invested</label>
+            <input type="number" id="learn-hours" class="form-control" placeholder="e.g. 35" min="0" step="0.5">
           </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Progress: <span id="learn-progress-val" style="color: var(--secondary);">75%</span></label>
+          <input type="range" id="learn-progress" min="5" max="100" value="75" style="width: 100%; accent-color: var(--secondary);">
         </div>
 
         <div class="form-field">
@@ -866,7 +1035,125 @@
           <input type="text" id="learn-tags" class="form-control" placeholder="LangChain, Gemini 1.5, Vector DB" required>
         </div>
 
+        <div class="form-field">
+          <label class="form-label">Key Milestones (one per line, start with [x] for completed, [ ] for pending)</label>
+          <textarea id="learn-milestones" class="form-control" rows="4" placeholder="[x] Prompt chaining & system instructions
+[x] Function calling & tool execution
+[ ] Vector store embeddings & RAG
+[ ] Production swarm coordination"></textarea>
+        </div>
+
         <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Learning Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Work & Study Log Modal -->
+  <div class="admin-modal-overlay" id="work-log-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="work-log-modal-title">Log Today's Work / Study Activity</h3>
+        <button class="modal-close-btn" onclick="closeModal('work-log-modal')">&times;</button>
+      </div>
+      <form id="work-log-modal-form">
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Date</label>
+            <input type="date" id="log-date" class="form-control" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <select id="log-category" class="form-control" required>
+              <option value="AI & Full-Stack">AI & Full-Stack</option>
+              <option value="Frontend & UI">Frontend & UI</option>
+              <option value="Backend & APIs">Backend & APIs</option>
+              <option value="DevOps & Cloud">DevOps & Cloud</option>
+              <option value="Architecture & Security">Architecture & Security</option>
+              <option value="General Work">General Work</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Hours Spent</label>
+            <input type="text" id="log-hours" class="form-control" placeholder="e.g. 4.5 hrs" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Status</label>
+            <select id="log-status" class="form-control" required>
+              <option value="Completed">Completed</option>
+              <option value="In Progress">In Progress</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Task / Subject Title</label>
+          <input type="text" id="log-title" class="form-control" placeholder="e.g. Built REST API with JWT Auth & Docker" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Accomplishment Description & Notes</label>
+          <textarea id="log-desc" class="form-control" rows="3" placeholder="What technical breakthrough or feature did you engineer today?" required></textarea>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Proof Link (GitHub Repo, Commit, or Live Demo URL)</label>
+          <input type="url" id="log-proof" class="form-control" placeholder="https://github.com/..." required>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Activity Log</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Service Modal -->
+  <div class="admin-modal-overlay" id="service-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="service-modal-title">Add Client Service Offering</h3>
+        <button class="modal-close-btn" onclick="closeModal('service-modal')">&times;</button>
+      </div>
+      <form id="service-modal-form">
+        <div class="form-field">
+          <label class="form-label">Service Title</label>
+          <input type="text" id="srv-title" class="form-control" placeholder="e.g. Full-Stack Web & SaaS Engineering" required>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">FontAwesome Icon Class</label>
+            <input type="text" id="srv-icon" class="form-control" placeholder="fas fa-laptop-code" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Badge Tag</label>
+            <input type="text" id="srv-badge" class="form-control" placeholder="e.g. Core Solution, High Demand" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Est. Turnaround Time</label>
+          <input type="text" id="srv-turnaround" class="form-control" placeholder="e.g. 1 - 2 Weeks" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Service Description</label>
+          <textarea id="srv-desc" class="form-control" rows="3" placeholder="Explain the business value and what problems this solves for the client..." required></textarea>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Key Deliverables (one per line)</label>
+          <textarea id="srv-deliverables" class="form-control" rows="3" placeholder="Custom Web Application
+Admin Dashboard & API
+Database Architecture & Migrations
+Production Cloud Deployment" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px;">Save Service</button>
       </form>
     </div>
   </div>
@@ -1015,6 +1302,74 @@
     </div>
   </div>
 
+  <!-- Diary Entry Modal (মনের কথা - Public / Private Selector) -->
+  <div class="admin-modal-overlay" id="diary-modal">
+    <div class="admin-modal-box">
+      <div class="modal-header">
+        <h3 id="diary-modal-title"><i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry (মনের কথা)</h3>
+        <button class="modal-close-btn" onclick="closeModal('diary-modal')">&times;</button>
+      </div>
+      <form id="diary-modal-form">
+        <input type="hidden" id="diary-id">
+
+        <div class="form-field">
+          <label class="form-label">Entry Title (শিরোনাম)</label>
+          <input type="text" id="diary-title" class="form-control" placeholder="e.g. আজকের উপলব্ধি ও আগামী দিনের পরিকল্পনা" required>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">Date (তারিখ)</label>
+            <input type="date" id="diary-date" class="form-control" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Mood / Emotion (মুড)</label>
+            <input type="text" id="diary-mood" class="form-control" placeholder="e.g. 🔥 Determined, 🚀 Inspired, 🧘 Calm" list="mood-suggestions" required>
+            <datalist id="mood-suggestions">
+              <option value="🔥 Determined">
+              <option value="🚀 Inspired">
+              <option value="💡 Reflection">
+              <option value="🎯 Laser Focused">
+              <option value="🧘 Calm & Thoughtful">
+              <option value="⚡ Energetic">
+              <option value="🔒 Private Thoughts">
+            </datalist>
+          </div>
+        </div>
+
+        <!-- KEY PRIVACY SELECTOR -->
+        <div class="form-field">
+          <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fas fa-eye"></i> Visibility & Privacy (কে কে দেখবে?)</span>
+            <span style="font-size: 0.75rem; color: #c084fc; font-weight: 700;">Selective Sharing Control</span>
+          </label>
+          <select id="diary-is-public" class="form-control" style="font-weight: 600; padding: 10px 14px; border-color: rgba(168,85,247,0.4);" required>
+            <option value="false">🔒 PRIVATE — শুধুমাত্র আমি দেখবো (Confidential / Hidden from public site)</option>
+            <option value="true">🌐 PUBLIC — সবাই দেখবে (Visible on your live portfolio website)</option>
+          </select>
+          <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
+            <i class="fas fa-shield-alt"></i> Private নির্বাচন করলে এটি কখনোই আপনার পাবলিক পোর্টফোলিওতে শো করবে না। শুধুমাত্র এই অ্যাডমিন প্যানেলে সংরক্ষিত থাকবে।
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Tags (ট্যাগ - comma separated)</label>
+          <input type="text" id="diary-tags" class="form-control" placeholder="Mindset, Growth, Coding, Life" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Content / Moner Kotha (মনের কথা বিস্তারিত)</label>
+          <textarea id="diary-content" class="form-control" rows="6" placeholder="আপনার মনের কথা, ভাবনা, আজকের দিনের অর্জন বা আত্মোপলব্ধি লিখুন..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 14px; background: linear-gradient(135deg, #a855f7, #6366f1); border-color: rgba(168,85,247,0.4);">
+          <i class="fas fa-save"></i> Save Diary Entry
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- AI Rule Modal -->
   <div class="admin-modal-overlay" id="rule-modal">
     <div class="admin-modal-box">
@@ -1042,7 +1397,7 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Scripts -->
-  <script src="js/profile-data.js?v=2.6"></script>
-  <script src="js/admin.js?v=2.6"></script>
+  <script src="js/profile-data.js?v=3.0"></script>
+  <script src="js/admin.js?v=3.0"></script>
 </body>
 </html>

@@ -53,12 +53,25 @@ function initAdminThemeToggle() {
    ========================================================== */
 function initAuth() {
   const pinOverlay = document.getElementById('pin-lock-overlay');
+  const pinBox = document.querySelector('.pin-box');
   const pinInput = document.getElementById('pin-input');
   const pinBtn = document.getElementById('pin-submit-btn');
   const lockBtn = document.getElementById('btn-lock-session');
+  const eyeBtn = document.getElementById('pin-toggle-btn');
+  const eyeIcon = document.getElementById('pin-eye-icon');
 
   if (sessionStorage.getItem('admin_authenticated') === 'true') {
     pinOverlay.classList.add('hidden');
+  }
+
+  // Eye visibility toggle
+  if (eyeBtn && pinInput && eyeIcon) {
+    eyeBtn.addEventListener('click', () => {
+      const isPassword = pinInput.type === 'password';
+      pinInput.type = isPassword ? 'text' : 'password';
+      eyeIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+      pinInput.focus();
+    });
   }
 
   function handleUnlock() {
@@ -72,7 +85,11 @@ function initAuth() {
       showToast('Welcome back, Admin!', 'success');
       loadAllAdminData();
     } else {
-      showToast('Incorrect PIN!', 'danger');
+      showToast('Incorrect PIN passcode!', 'danger');
+      if (pinBox) {
+        pinBox.classList.add('shake');
+        setTimeout(() => pinBox.classList.remove('shake'), 450);
+      }
       pinInput.value = '';
       pinInput.focus();
     }
@@ -90,6 +107,7 @@ function initAuth() {
       sessionStorage.removeItem('admin_authenticated');
       pinOverlay.classList.remove('hidden');
       showToast('Session locked', 'info');
+      setTimeout(() => pinInput && pinInput.focus(), 150);
     });
   }
 }
@@ -102,12 +120,29 @@ function initNavigation() {
   const views = document.querySelectorAll('.admin-view');
   const viewTitle = document.getElementById('current-view-title');
   const viewDesc = document.getElementById('current-view-desc');
+  const sidebarToggle = document.getElementById('admin-sidebar-toggle');
+  const sidebar = document.getElementById('admin-sidebar');
+  const sidebarBackdrop = document.getElementById('admin-sidebar-backdrop');
+
+  function openSidebar() {
+    if (sidebar) sidebar.classList.add('mobile-open');
+    if (sidebarBackdrop) sidebarBackdrop.classList.add('open');
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (sidebarBackdrop) sidebarBackdrop.classList.remove('open');
+  }
+
+  if (sidebarToggle) sidebarToggle.addEventListener('click', openSidebar);
+  if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
 
   const descriptions = {
     'view-dashboard': 'Overview of platform statistics and quick shortcuts',
     'view-bio': 'Customize personal bio narrative, titles, stats, and socials',
     'view-skills': 'Manage technical competencies, categories, and proficiency levels',
     'view-learning': 'Manage technologies and topics you are currently learning',
+    'view-diary': 'Manage personal diary entries, reflections, and toggle public/private visibility',
     'view-resources': 'Upload and manage downloadable guides, roadmaps, and cheat sheets',
     'view-projects': 'Showcase software projects, repository links, and demos',
     'view-channels-vip': 'Configure public community channels and exclusive VIP Club',
@@ -132,6 +167,9 @@ function initNavigation() {
       const label = item.querySelector('.nav-item-left span')?.textContent || 'Dashboard';
       if (viewTitle) viewTitle.textContent = label;
       if (viewDesc) viewDesc.textContent = descriptions[targetView] || '';
+
+      // Auto close sidebar on mobile
+      closeSidebar();
     });
   });
 }
@@ -157,8 +195,11 @@ function loadAllAdminData() {
   }
 
   renderBioForm(data);
+  renderServicesTable(data);
   renderSkillsTable(data);
   renderLearningList(data);
+  renderWorkLogsTable(data);
+  renderDiaryAdmin(data);
   renderResourcesTable(data);
   renderProjectsList(data);
   renderVIPForm(data);
@@ -220,6 +261,101 @@ function renderBioForm(data) {
 }
 
 /* ==========================================================
+   1-CLICK IDENTITY PRESETS (BUSINESS VS CYBER)
+   ========================================================== */
+window.handleApplyPresetUI = function(presetKey) {
+  const isBusiness = presetKey === 'business';
+  const label = isBusiness ? 'Ultra-Professional Business Executive' : 'Cyber Operative';
+  if (confirm(`Apply the ${label} presentation preset? This will automatically update your public title, bio, stats, and identity configuration.`)) {
+    applyProfilePreset(presetKey);
+    loadAllAdminData();
+    showToast(`Switched to ${label} preset!`, 'success');
+  }
+};
+
+/* ==========================================================
+   SERVICES & BUSINESS SOLUTIONS CMS
+   ========================================================== */
+let editingServiceIndex = -1;
+
+function renderServicesTable(data) {
+  const tbody = document.getElementById('services-table-body');
+  if (!tbody) return;
+
+  const services = data.services || [];
+  if (services.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align: center; padding: 24px; color: var(--text-dim);">
+          No client services configured yet. Click "Add New Service" above.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = services.map((s, idx) => `
+    <tr>
+      <td>
+        <i class="${s.icon || 'fas fa-briefcase'}" style="margin-right: 8px; color: var(--secondary);"></i>
+        <strong>${s.title}</strong>
+      </td>
+      <td><span class="badge-tag badge-tools">${s.badge || 'Available'}</span></td>
+      <td><span style="font-size: 0.82rem; font-family: var(--font-code); color: var(--gold);">${s.turnaround || '1-2 Weeks'}</span></td>
+      <td>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">
+          ${(s.deliverables || []).length} Deliverables
+        </span>
+      </td>
+      <td>
+        <div class="table-actions">
+          <button class="btn-icon-action" onclick="openEditServiceModal(${idx})" title="Edit Service"><i class="fas fa-edit"></i></button>
+          <button class="btn-icon-action delete" onclick="deleteService(${idx})" title="Delete Service"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+window.openAddServiceModal = function() {
+  editingServiceIndex = -1;
+  document.getElementById('service-modal-title').textContent = 'Add Client Service Offering';
+  document.getElementById('srv-title').value = '';
+  document.getElementById('srv-icon').value = 'fas fa-laptop-code';
+  document.getElementById('srv-badge').value = 'Core Solution';
+  document.getElementById('srv-turnaround').value = '1 - 2 Weeks';
+  document.getElementById('srv-desc').value = '';
+  document.getElementById('srv-deliverables').value = '';
+  openModal('service-modal');
+};
+
+window.openEditServiceModal = function(idx) {
+  editingServiceIndex = idx;
+  const data = getProfileData();
+  const s = (data.services || [])[idx];
+  if (!s) return;
+
+  document.getElementById('service-modal-title').textContent = 'Edit Client Service Offering';
+  document.getElementById('srv-title').value = s.title;
+  document.getElementById('srv-icon').value = s.icon || 'fas fa-briefcase';
+  document.getElementById('srv-badge').value = s.badge || '';
+  document.getElementById('srv-turnaround').value = s.turnaround || '';
+  document.getElementById('srv-desc').value = s.description || '';
+  document.getElementById('srv-deliverables').value = (s.deliverables || []).join('\n');
+  openModal('service-modal');
+};
+
+window.deleteService = function(idx) {
+  if (confirm('Delete this service offering?')) {
+    const data = getProfileData();
+    data.services.splice(idx, 1);
+    saveProfileData(data);
+    loadAllAdminData();
+    showToast('Service deleted', 'success');
+  }
+};
+
+/* ==========================================================
    SKILLS MATRIX
    ========================================================== */
 function renderSkillsTable(data) {
@@ -236,9 +372,17 @@ function renderSkillsTable(data) {
         <span class="badge-tag badge-${skill.category}">${skill.category.toUpperCase()}</span>
       </td>
       <td>
+        ${skill.importance === 'core' 
+          ? `<span class="badge-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); font-weight: 700;"><i class="fas fa-star"></i> CORE</span>` 
+          : skill.importance === 'optional' 
+            ? `<span class="badge-tag" style="background: rgba(255, 255, 255, 0.08); color: var(--text-dim);">OPTIONAL</span>`
+            : `<span class="badge-tag badge-tools">SUPPORTING</span>`
+        }
+      </td>
+      <td>
         <div style="display: flex; align-items: center; gap: 10px; width: 140px;">
           <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
-            <div style="width: ${skill.level}%; height: 100%; background: var(--secondary);"></div>
+            <div style="width: ${skill.level}%; height: 100%; background: ${skill.importance === 'core' ? '#fbbf24' : 'var(--secondary)'};"></div>
           </div>
           <span style="font-family: var(--font-code); font-size: 0.8rem;">${skill.level}%</span>
         </div>
@@ -263,6 +407,7 @@ window.openAddSkillModal = function() {
   document.getElementById('skill-modal-title').textContent = 'Add New Skill';
   document.getElementById('skill-name').value = '';
   document.getElementById('skill-category').value = 'frontend';
+  document.getElementById('skill-importance').value = 'core';
   document.getElementById('skill-level').value = 85;
   document.getElementById('skill-level-val').textContent = '85%';
   document.getElementById('skill-badge').value = 'Proficient';
@@ -279,6 +424,7 @@ window.openEditSkillModal = function(idx) {
   document.getElementById('skill-modal-title').textContent = 'Edit Skill';
   document.getElementById('skill-name').value = s.name;
   document.getElementById('skill-category').value = s.category;
+  document.getElementById('skill-importance').value = s.importance || 'secondary';
   document.getElementById('skill-level').value = s.level;
   document.getElementById('skill-level-val').textContent = s.level + '%';
   document.getElementById('skill-badge').value = s.badge;
@@ -297,44 +443,192 @@ window.deleteSkill = function(idx) {
 };
 
 /* ==========================================================
-   LEARNING ROADMAP (KI KI SIKI)
+   WORK & LEARNING TRACKER STUDIO
    ========================================================== */
 function renderLearningList(data) {
   const container = document.getElementById('learning-admin-list');
   if (!container || !data.learningRoadmap) return;
 
+  if (data.learningRoadmap.length === 0) {
+    container.innerHTML = `<p style="color: var(--text-dim); text-align: center; padding: 20px;">No learning roadmap goals added yet. Click "Add Learning Goal" to start tracking!</p>`;
+    return;
+  }
+
   container.innerHTML = data.learningRoadmap.map((item, idx) => `
-    <div class="admin-item-card">
-      <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-          <h4 class="admin-item-title">${item.title}</h4>
-          <span class="badge-tag badge-tools">${item.badge}</span>
-          <span style="font-family: var(--font-code); color: var(--secondary); font-size: 0.85rem;">${item.progress}%</span>
+    <div class="admin-item-card" style="flex-direction: column; align-items: stretch; gap: 14px; padding: 18px 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
+            <h4 class="admin-item-title" style="font-size: 1.05rem;">${item.title}</h4>
+            <span class="badge-tag badge-tools">${item.badge}</span>
+            <span style="font-family: var(--font-code); color: var(--secondary); font-size: 0.9rem; font-weight: 700;">${item.progress}%</span>
+            ${item.hoursLogged ? `<span style="font-size: 0.75rem; font-family: var(--font-code); color: var(--gold); background: rgba(245,158,11,0.12); padding: 2px 8px; border-radius: 9999px;"><i class="fas fa-clock"></i> ${item.hoursLogged}h</span>` : ''}
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">${item.description}</p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            ${(item.tags || []).map(t => `<span class="admin-tag-pill">${t}</span>`).join('')}
+          </div>
         </div>
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">${item.description}</p>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-          ${(item.tags || []).map(t => `<span class="admin-tag-pill">${t}</span>`).join('')}
+
+        <div class="table-actions">
+          <button class="btn-icon-action" onclick="openEditLearningModal(${idx})" title="Edit Goal"><i class="fas fa-edit"></i></button>
+          <button class="btn-icon-action delete" onclick="deleteLearning(${idx})" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
         </div>
       </div>
-      <div class="table-actions">
-        <button class="btn-icon-action" onclick="openEditLearningModal(${idx})" title="Edit Goal"><i class="fas fa-edit"></i></button>
-        <button class="btn-icon-action delete" onclick="deleteLearning(${idx})" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
+
+      <!-- Quick Progress Buttons & Promotion Actions -->
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 0.78rem; color: var(--text-dim); margin-right: 4px;">Quick Adjust:</span>
+          <button type="button" class="btn-action" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(255,255,255,0.08);" onclick="adjustGoalProgress(${idx}, -10)">-10%</button>
+          <button type="button" class="btn-action" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(255,255,255,0.08);" onclick="adjustGoalProgress(${idx}, 10)">+10%</button>
+          <button type="button" class="btn-action" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3);" onclick="adjustGoalProgress(${idx}, 100)"><i class="fas fa-check"></i> 100% Mastered</button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-action" style="padding: 4px 12px; font-size: 0.78rem; background: rgba(99,102,241,0.15); color: var(--primary); border: 1px solid rgba(99,102,241,0.3);" onclick="promoteGoalToSkill(${idx})" title="Convert to permanent skill in matrix">
+            <i class="fas fa-bolt"></i> Promote to Skill
+          </button>
+          <button type="button" class="btn-action" style="padding: 4px 12px; font-size: 0.78rem; background: rgba(6,182,212,0.15); color: var(--secondary); border: 1px solid rgba(6,182,212,0.3);" onclick="promoteGoalToProject(${idx})" title="Convert to featured showcase project">
+            <i class="fas fa-cubes"></i> Promote to Project
+          </button>
+        </div>
       </div>
+
+      <!-- Interactive Milestone Checklists -->
+      ${(item.milestones && item.milestones.length) ? `
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 4px;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-dim); margin-bottom: 8px;">
+            <span><i class="fas fa-tasks"></i> Milestones Checklist:</span>
+            <span>${item.milestones.filter(m => m.done).length}/${item.milestones.length} Done</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            ${item.milestones.map((m, mIdx) => `
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer; color: ${m.done ? 'var(--text-main)' : 'var(--text-muted)'};">
+                <input type="checkbox" ${m.done ? 'checked' : ''} onchange="toggleMilestone(${idx}, ${mIdx})" style="accent-color: #00ff88;">
+                <span style="${m.done ? 'text-decoration: line-through; opacity: 0.8;' : ''}">${m.title}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
     </div>
   `).join('');
 }
+
+window.adjustGoalProgress = function(goalIdx, amount) {
+  const data = getProfileData();
+  const goal = data.learningRoadmap[goalIdx];
+  if (!goal) return;
+
+  if (amount === 100) {
+    goal.progress = 100;
+    goal.badge = "Mastered";
+  } else {
+    goal.progress = Math.min(100, Math.max(0, (goal.progress || 0) + amount));
+    if (goal.progress >= 95) goal.badge = "Near Completion";
+    else if (goal.progress >= 50) goal.badge = "In Progress";
+  }
+
+  saveProfileData(data);
+  loadAllAdminData();
+  showToast(`Updated "${goal.title}" progress to ${goal.progress}%`, 'success');
+};
+
+window.toggleMilestone = function(goalIdx, milestoneIdx) {
+  const data = getProfileData();
+  const goal = data.learningRoadmap[goalIdx];
+  if (!goal || !goal.milestones || !goal.milestones[milestoneIdx]) return;
+
+  goal.milestones[milestoneIdx].done = !goal.milestones[milestoneIdx].done;
+  
+  // Recalculate progress based on milestones
+  const doneCount = goal.milestones.filter(m => m.done).length;
+  const total = goal.milestones.length;
+  if (total > 0) {
+    goal.progress = Math.round((doneCount / total) * 100);
+    if (goal.progress === 100) goal.badge = "Mastered";
+    else if (goal.progress >= 70) goal.badge = "In Progress";
+  }
+
+  saveProfileData(data);
+  loadAllAdminData();
+  showToast('Milestone status updated!', 'info');
+};
+
+window.promoteGoalToSkill = function(goalIdx) {
+  const data = getProfileData();
+  const goal = data.learningRoadmap[goalIdx];
+  if (!goal) return;
+
+  if (!data.skills) data.skills = [];
+  
+  // Check if skill already exists
+  const exists = data.skills.some(s => s.name.toLowerCase() === goal.title.toLowerCase());
+  if (exists) {
+    showToast(`Skill "${goal.title}" already exists in matrix!`, 'warning');
+    return;
+  }
+
+  let cat = "backend";
+  const titleLower = goal.title.toLowerCase();
+  if (titleLower.includes('react') || titleLower.includes('css') || titleLower.includes('frontend') || titleLower.includes('next')) cat = "frontend";
+  else if (titleLower.includes('docker') || titleLower.includes('git') || titleLower.includes('linux') || titleLower.includes('cloud')) cat = "tools";
+  else if (titleLower.includes('soft') || titleLower.includes('lead')) cat = "soft";
+
+  data.skills.push({
+    id: 'sk_' + Date.now(),
+    name: goal.title,
+    category: cat,
+    importance: "core",
+    level: Math.max(85, goal.progress || 88),
+    badge: goal.progress >= 90 ? "Advanced" : "Proficient",
+    icon: "fas fa-check-circle"
+  });
+
+  saveProfileData(data);
+  loadAllAdminData();
+  showToast(`Promoted "${goal.title}" to Skills Matrix!`, 'success');
+};
+
+window.promoteGoalToProject = function(goalIdx) {
+  const data = getProfileData();
+  const goal = data.learningRoadmap[goalIdx];
+  if (!goal) return;
+
+  if (!data.projects) data.projects = [];
+
+  const newProj = {
+    id: 'proj_' + Date.now(),
+    title: goal.title + " Implementation",
+    description: goal.description || `Production-grade architecture and implementation of ${goal.title}.`,
+    tags: goal.tags && goal.tags.length ? goal.tags : ["Engineering", "Architecture"],
+    github: "https://github.com",
+    demo: "#",
+    featured: true
+  };
+
+  data.projects.unshift(newProj);
+  saveProfileData(data);
+  loadAllAdminData();
+  showToast(`Promoted "${goal.title}" to Featured Projects!`, 'success');
+};
 
 let editingLearningIndex = -1;
 
 window.openAddLearningModal = function() {
   editingLearningIndex = -1;
-  document.getElementById('learning-modal-title').textContent = 'Add Learning Goal';
+  document.getElementById('learning-modal-title').textContent = 'Add Learning Goal & Milestones';
   document.getElementById('learn-title').value = '';
   document.getElementById('learn-desc').value = '';
   document.getElementById('learn-badge').value = 'Actively Exploring';
-  document.getElementById('learn-progress').value = 75;
-  document.getElementById('learn-progress-val').textContent = '75%';
+  document.getElementById('learn-hours').value = '20';
+  document.getElementById('learn-progress').value = 50;
+  document.getElementById('learn-progress-val').textContent = '50%';
   document.getElementById('learn-tags').value = '';
+  document.getElementById('learn-milestones').value = `[x] Core fundamentals & architecture
+[ ] Build working prototype
+[ ] Production benchmark & deployment`;
   openModal('learning-modal');
 };
 
@@ -344,13 +638,21 @@ window.openEditLearningModal = function(idx) {
   const item = data.learningRoadmap[idx];
   if (!item) return;
 
-  document.getElementById('learning-modal-title').textContent = 'Edit Learning Goal';
+  document.getElementById('learning-modal-title').textContent = 'Edit Learning Goal & Milestones';
   document.getElementById('learn-title').value = item.title;
   document.getElementById('learn-desc').value = item.description;
   document.getElementById('learn-badge').value = item.badge;
+  document.getElementById('learn-hours').value = item.hoursLogged || 0;
   document.getElementById('learn-progress').value = item.progress;
   document.getElementById('learn-progress-val').textContent = item.progress + '%';
   document.getElementById('learn-tags').value = (item.tags || []).join(', ');
+
+  if (item.milestones && item.milestones.length) {
+    document.getElementById('learn-milestones').value = item.milestones.map(m => `${m.done ? '[x]' : '[ ]'} ${m.title}`).join('\n');
+  } else {
+    document.getElementById('learn-milestones').value = '';
+  }
+
   openModal('learning-modal');
 };
 
@@ -361,6 +663,286 @@ window.deleteLearning = function(idx) {
     saveProfileData(data);
     loadAllAdminData();
     showToast('Learning goal deleted', 'success');
+  }
+};
+
+/* ==========================================================
+   DAILY WORK & STUDY JOURNAL CMS
+   ========================================================== */
+let editingWorkLogIndex = -1;
+
+function renderWorkLogsTable(data) {
+  const tbody = document.getElementById('work-logs-admin-tbody');
+  if (!tbody) return;
+
+  const logs = data.workLogs || [];
+  if (logs.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-dim);">
+          No work logs recorded yet. Click "Log Today's Work" above to record daily progress!
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = logs.map((log, idx) => `
+    <tr>
+      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--text-dim);">${log.date}</span></td>
+      <td><span class="badge-tag badge-backend">${log.category || 'General'}</span></td>
+      <td><span style="font-family: var(--font-code); font-size: 0.8rem; color: var(--gold);">${log.hours || '-'}</span></td>
+      <td>
+        <strong>${log.title}</strong>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin: 2px 0 0; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${log.description}</p>
+      </td>
+      <td>
+        ${log.proofUrl && log.proofUrl !== '#' ? `
+          <a href="${log.proofUrl}" target="_blank" style="color: var(--secondary); font-size: 0.8rem; text-decoration: none;">
+            <i class="fab fa-github"></i> Proof Link
+          </a>
+        ` : '<span style="color: var(--text-dim); font-size: 0.8rem;">None</span>'}
+      </td>
+      <td>
+        <span class="badge-tag ${log.status === 'Completed' ? 'badge-frontend' : 'badge-tools'}">
+          ${log.status || 'Completed'}
+        </span>
+      </td>
+      <td>
+        <div class="table-actions">
+          <button class="btn-icon-action" onclick="openEditWorkLogModal(${idx})" title="Edit Log"><i class="fas fa-edit"></i></button>
+          <button class="btn-icon-action delete" onclick="deleteWorkLog(${idx})" title="Delete Log"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+window.openAddWorkLogModal = function() {
+  editingWorkLogIndex = -1;
+  document.getElementById('work-log-modal-title').textContent = "Log Today's Work / Study Activity";
+  document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('log-category').value = 'AI & Full-Stack';
+  document.getElementById('log-hours').value = '4.0 hrs';
+  document.getElementById('log-status').value = 'Completed';
+  document.getElementById('log-title').value = '';
+  document.getElementById('log-desc').value = '';
+  document.getElementById('log-proof').value = 'https://github.com';
+  openModal('work-log-modal');
+};
+
+window.openEditWorkLogModal = function(idx) {
+  editingWorkLogIndex = idx;
+  const data = getProfileData();
+  const log = (data.workLogs || [])[idx];
+  if (!log) return;
+
+  document.getElementById('work-log-modal-title').textContent = "Edit Work / Study Activity Log";
+  document.getElementById('log-date').value = log.date || '';
+  document.getElementById('log-category').value = log.category || 'AI & Full-Stack';
+  document.getElementById('log-hours').value = log.hours || '';
+  document.getElementById('log-status').value = log.status || 'Completed';
+  document.getElementById('log-title').value = log.title || '';
+  document.getElementById('log-desc').value = log.description || '';
+  document.getElementById('log-proof').value = log.proofUrl || '';
+  openModal('work-log-modal');
+};
+
+window.deleteWorkLog = function(idx) {
+  if (confirm('Delete this work log entry?')) {
+    const data = getProfileData();
+    data.workLogs.splice(idx, 1);
+    saveProfileData(data);
+    loadAllAdminData();
+    showToast('Work log deleted', 'success');
+  }
+};
+
+/* ==========================================================
+   PERSONAL DIARY & REFLECTIONS (মনের কথা) CMS CONTROLLER
+   ========================================================== */
+let activeDiaryAdminFilter = 'all';
+let diaryAdminSearchQuery = '';
+let editingDiaryId = null;
+
+function renderDiaryAdmin(data) {
+  const listContainer = document.getElementById('diary-admin-list');
+  const statTotal = document.getElementById('diary-stat-total');
+  const statPublic = document.getElementById('diary-stat-public');
+  const statPrivate = document.getElementById('diary-stat-private');
+
+  const entries = data.diaryEntries || [];
+  const publicCount = entries.filter(e => e.isPublic === true).length;
+  const privateCount = entries.filter(e => e.isPublic === false).length;
+
+  if (statTotal) statTotal.textContent = entries.length;
+  if (statPublic) statPublic.textContent = publicCount;
+  if (statPrivate) statPrivate.textContent = privateCount;
+
+  if (!listContainer) return;
+
+  if (entries.length === 0) {
+    listContainer.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px; color: var(--text-dim); background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--border-color);">
+        <i class="fas fa-book-open" style="font-size: 2rem; color: #a855f7; margin-bottom: 12px;"></i>
+        <h4 style="margin-bottom: 6px;">No Diary Reflections Yet</h4>
+        <p style="font-size: 0.85rem; max-width: 440px; margin: 0 auto 16px;">
+          Start noting down your thoughts, daily learnings, and life updates. You can toggle each entry between Public (🌐) and Private (🔒).
+        </p>
+        <button class="btn-action btn-primary" onclick="openAddDiaryModal()" style="background: linear-gradient(135deg, #a855f7, #6366f1); border-color: rgba(168,85,247,0.4);">
+          <i class="fas fa-plus"></i> Write First Entry
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Filter by tab and search
+  let filtered = entries.filter(entry => {
+    if (activeDiaryAdminFilter === 'public' && entry.isPublic !== true) return false;
+    if (activeDiaryAdminFilter === 'private' && entry.isPublic !== false) return false;
+
+    if (diaryAdminSearchQuery) {
+      const q = diaryAdminSearchQuery.toLowerCase();
+      const matchTitle = entry.title && entry.title.toLowerCase().includes(q);
+      const matchContent = entry.content && entry.content.toLowerCase().includes(q);
+      const matchMood = entry.mood && entry.mood.toLowerCase().includes(q);
+      const matchTags = entry.tags && entry.tags.some(t => t.toLowerCase().includes(q));
+      if (!matchTitle && !matchContent && !matchMood && !matchTags) return false;
+    }
+
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    listContainer.innerHTML = `
+      <div style="text-align: center; padding: 30px; color: var(--text-dim);">
+        <p>No entries found matching "${diaryAdminSearchQuery || activeDiaryAdminFilter}".</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Sort newest first
+  filtered.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  listContainer.innerHTML = filtered.map(entry => {
+    const isPub = entry.isPublic === true;
+    const badgeHtml = isPub 
+      ? `<span class="diary-admin-badge-public" title="This reflection is visible on your live website"><i class="fas fa-globe"></i> 🌐 PUBLIC (সবাই দেখবে)</span>`
+      : `<span class="diary-admin-badge-private" title="Confidential: Only you can see this in Admin"><i class="fas fa-lock"></i> 🔒 PRIVATE (শুধুমাত্র আমি)</span>`;
+
+    const toggleBtnLabel = isPub 
+      ? `<i class="fas fa-lock"></i> Make Private` 
+      : `<i class="fas fa-globe"></i> Make Public`;
+
+    const tagsHtml = (entry.tags || []).map(t => `<span class="badge-tag">${t}</span>`).join(' ');
+
+    return `
+      <div class="diary-admin-card" id="diary-item-${entry.id}">
+        <div class="diary-admin-card-header">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h4 class="diary-admin-card-title">${entry.title}</h4>
+            ${entry.mood ? `<span class="badge-tag" style="background: rgba(168,85,247,0.15); color: #d8b4fe;">${entry.mood}</span>` : ''}
+          </div>
+          <div class="diary-admin-badges">
+            ${badgeHtml}
+          </div>
+        </div>
+
+        <div class="diary-admin-content-preview">${entry.content}</div>
+
+        <div class="diary-admin-card-footer">
+          <div class="diary-admin-meta-info">
+            <span><i class="far fa-calendar-alt"></i> ${entry.date || 'Undated'}</span>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">${tagsHtml}</div>
+          </div>
+
+          <div class="diary-admin-actions">
+            <!-- 1-Click Privacy Toggle Switch -->
+            <button class="btn-privacy-toggle" onclick="toggleDiaryPrivacy('${entry.id}')" title="1-Click Switch: Toggle Public vs Private">
+              ${toggleBtnLabel}
+            </button>
+            <button class="btn-table-action" onclick="openEditDiaryModal('${entry.id}')" title="Edit Entry">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-table-action delete" onclick="deleteDiaryEntry('${entry.id}')" title="Delete Entry">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.filterDiaryAdmin = function(filterType) {
+  activeDiaryAdminFilter = filterType;
+  document.querySelectorAll('.diary-admin-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.getAttribute('data-diary-admin-filter') === filterType);
+  });
+  renderDiaryAdmin(getProfileData());
+};
+
+window.handleDiaryAdminSearch = function(query) {
+  diaryAdminSearchQuery = (query || '').trim();
+  renderDiaryAdmin(getProfileData());
+};
+
+window.toggleDiaryPrivacy = function(id) {
+  const data = getProfileData();
+  const entry = (data.diaryEntries || []).find(e => e.id === id);
+  if (!entry) return;
+
+  // Toggle boolean
+  entry.isPublic = !entry.isPublic;
+  saveProfileData(data);
+  loadAllAdminData();
+
+  if (entry.isPublic) {
+    showToast(`"${entry.title}" is now 🌐 PUBLIC! (Visible on portfolio)`, 'success');
+  } else {
+    showToast(`"${entry.title}" is now 🔒 PRIVATE! (Admin locked only)`, 'info');
+  }
+};
+
+window.openAddDiaryModal = function() {
+  editingDiaryId = null;
+  document.getElementById('diary-modal-title').innerHTML = '<i class="fas fa-book-open" style="color: #c084fc;"></i> Write Diary Entry (মনের কথা)';
+  document.getElementById('diary-id').value = '';
+  document.getElementById('diary-title').value = '';
+  document.getElementById('diary-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('diary-mood').value = '🔥 Determined';
+  document.getElementById('diary-is-public').value = 'false'; // Default to private for privacy safety
+  document.getElementById('diary-tags').value = 'Mindset, Growth';
+  document.getElementById('diary-content').value = '';
+  openModal('diary-modal');
+};
+
+window.openEditDiaryModal = function(id) {
+  const data = getProfileData();
+  const entry = (data.diaryEntries || []).find(e => e.id === id);
+  if (!entry) return;
+
+  editingDiaryId = id;
+  document.getElementById('diary-modal-title').innerHTML = '<i class="fas fa-edit" style="color: #c084fc;"></i> Edit Diary Entry';
+  document.getElementById('diary-id').value = entry.id;
+  document.getElementById('diary-title').value = entry.title || '';
+  document.getElementById('diary-date').value = entry.date || new Date().toISOString().split('T')[0];
+  document.getElementById('diary-mood').value = entry.mood || 'Reflection';
+  document.getElementById('diary-is-public').value = entry.isPublic ? 'true' : 'false';
+  document.getElementById('diary-tags').value = (entry.tags || []).join(', ');
+  document.getElementById('diary-content').value = entry.content || '';
+  openModal('diary-modal');
+};
+
+window.deleteDiaryEntry = function(id) {
+  if (confirm('Are you sure you want to delete this diary entry?')) {
+    const data = getProfileData();
+    data.diaryEntries = (data.diaryEntries || []).filter(e => e.id !== id);
+    saveProfileData(data);
+    loadAllAdminData();
+    showToast('Diary entry deleted', 'success');
   }
 };
 
@@ -1054,6 +1636,7 @@ function initModals() {
         id: editingSkillIndex >= 0 ? data.skills[editingSkillIndex].id : 'sk_' + Date.now(),
         name: document.getElementById('skill-name').value.trim(),
         category: document.getElementById('skill-category').value,
+        importance: document.getElementById('skill-importance').value,
         level: parseInt(document.getElementById('skill-level').value, 10),
         badge: document.getElementById('skill-badge').value.trim(),
         icon: document.getElementById('skill-icon').value.trim() || 'fas fa-code'
@@ -1076,13 +1659,24 @@ function initModals() {
       const data = getProfileData();
       if (!data.learningRoadmap) data.learningRoadmap = [];
 
+      const milestonesRaw = document.getElementById('learn-milestones').value.trim();
+      const milestones = milestonesRaw ? milestonesRaw.split('\n').map(line => {
+        line = line.trim();
+        if (!line) return null;
+        const isDone = line.startsWith('[x]') || line.startsWith('[X]');
+        const title = line.replace(/^\[[ xX]\]\s*/, '').trim();
+        return { title: title || line, done: isDone };
+      }).filter(Boolean) : [];
+
       const obj = {
         id: editingLearningIndex >= 0 ? data.learningRoadmap[editingLearningIndex].id : 'learn_' + Date.now(),
         title: document.getElementById('learn-title').value.trim(),
         description: document.getElementById('learn-desc').value.trim(),
         badge: document.getElementById('learn-badge').value.trim(),
+        hoursLogged: parseFloat(document.getElementById('learn-hours').value) || 0,
         progress: parseInt(document.getElementById('learn-progress').value, 10),
-        tags: document.getElementById('learn-tags').value.split(',').map(t => t.trim()).filter(Boolean)
+        tags: document.getElementById('learn-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+        milestones: milestones
       };
 
       if (editingLearningIndex >= 0) data.learningRoadmap[editingLearningIndex] = obj;
@@ -1091,7 +1685,67 @@ function initModals() {
       saveProfileData(data);
       closeModal('learning-modal');
       loadAllAdminData();
-      showToast('Learning roadmap goal saved!', 'success');
+      showToast('Learning roadmap goal & milestones saved!', 'success');
+    };
+  }
+
+  // Work & Study Log Submit
+  const workLogForm = document.getElementById('work-log-modal-form');
+  if (workLogForm) {
+    workLogForm.onsubmit = (e) => {
+      e.preventDefault();
+      const data = getProfileData();
+      if (!data.workLogs) data.workLogs = [];
+
+      const obj = {
+        id: editingWorkLogIndex >= 0 ? data.workLogs[editingWorkLogIndex].id : 'log_' + Date.now(),
+        date: document.getElementById('log-date').value,
+        category: document.getElementById('log-category').value,
+        hours: document.getElementById('log-hours').value.trim(),
+        status: document.getElementById('log-status').value,
+        title: document.getElementById('log-title').value.trim(),
+        description: document.getElementById('log-desc').value.trim(),
+        proofUrl: document.getElementById('log-proof').value.trim() || '#'
+      };
+
+      if (editingWorkLogIndex >= 0) data.workLogs[editingWorkLogIndex] = obj;
+      else data.workLogs.unshift(obj);
+
+      saveProfileData(data);
+      closeModal('work-log-modal');
+      loadAllAdminData();
+      showToast('Activity log recorded successfully!', 'success');
+    };
+  }
+
+  // Client Service Offering Submit
+  const serviceForm = document.getElementById('service-modal-form');
+  if (serviceForm) {
+    serviceForm.onsubmit = (e) => {
+      e.preventDefault();
+      const data = getProfileData();
+      if (!data.services) data.services = [];
+
+      const deliverablesRaw = document.getElementById('srv-deliverables').value.trim();
+      const deliverables = deliverablesRaw ? deliverablesRaw.split('\n').map(d => d.trim()).filter(Boolean) : [];
+
+      const obj = {
+        id: editingServiceIndex >= 0 ? data.services[editingServiceIndex].id : 'srv_' + Date.now(),
+        title: document.getElementById('srv-title').value.trim(),
+        icon: document.getElementById('srv-icon').value.trim() || 'fas fa-briefcase',
+        badge: document.getElementById('srv-badge').value.trim() || 'Available',
+        turnaround: document.getElementById('srv-turnaround').value.trim() || '1 - 2 Weeks',
+        description: document.getElementById('srv-desc').value.trim(),
+        deliverables: deliverables
+      };
+
+      if (editingServiceIndex >= 0) data.services[editingServiceIndex] = obj;
+      else data.services.push(obj);
+
+      saveProfileData(data);
+      closeModal('service-modal');
+      loadAllAdminData();
+      showToast('Client service offering saved!', 'success');
     };
   }
 
@@ -1199,6 +1853,58 @@ function initModals() {
       closeModal('rule-modal');
       loadAllAdminData();
       showToast('AI Rule saved successfully!', 'success');
+    };
+  }
+
+  // Diary Entry Submit
+  const diaryForm = document.getElementById('diary-modal-form');
+  if (diaryForm) {
+    diaryForm.onsubmit = (e) => {
+      e.preventDefault();
+      const data = getProfileData();
+      if (!data.diaryEntries) data.diaryEntries = [];
+
+      const id = document.getElementById('diary-id').value;
+      const title = document.getElementById('diary-title').value.trim();
+      const date = document.getElementById('diary-date').value;
+      const mood = document.getElementById('diary-mood').value.trim();
+      const isPublic = document.getElementById('diary-is-public').value === 'true';
+      const tagsStr = document.getElementById('diary-tags').value;
+      const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
+      const content = document.getElementById('diary-content').value.trim();
+
+      if (id) {
+        // Edit existing
+        const idx = data.diaryEntries.findIndex(item => item.id === id);
+        if (idx !== -1) {
+          data.diaryEntries[idx] = {
+            ...data.diaryEntries[idx],
+            title,
+            date,
+            mood,
+            isPublic,
+            tags,
+            content
+          };
+        }
+      } else {
+        // Create new
+        const newEntry = {
+          id: 'diary_' + Date.now(),
+          title,
+          date,
+          mood,
+          isPublic,
+          tags,
+          content
+        };
+        data.diaryEntries.unshift(newEntry);
+      }
+
+      saveProfileData(data);
+      closeModal('diary-modal');
+      loadAllAdminData();
+      showToast(isPublic ? 'Diary saved as 🌐 PUBLIC!' : 'Diary saved as 🔒 PRIVATE!', 'success');
     };
   }
 

@@ -187,6 +187,12 @@
       </div>
 
       <div class="header-actions">
+        <!-- Live SQLite Database Status Pill -->
+        <div id="db-status-badge" class="db-status-pill" title="Live SQLite Database Engine" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; font-size: 0.76rem; font-family: var(--font-code); background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.35); color: #00ff88;">
+          <span id="db-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 8px #00ff88;"></span>
+          <span id="db-status-text">SQLite: Connecting...</span>
+        </div>
+
         <button class="theme-toggle-btn" id="admin-theme-toggle" title="Toggle Light / Dark Mode" aria-label="Toggle Light / Dark Mode" style="width: 36px; height: 36px; font-size: 0.95rem;">
           <i class="fas fa-moon" id="admin-theme-icon"></i>
         </button>
@@ -239,6 +245,16 @@
             <div class="metric-details">
               <h3 id="metric-messages-count">0</h3>
               <p>Form Messages</p>
+            </div>
+          </div>
+
+          <div class="metric-card" id="metric-db-card">
+            <div class="metric-icon-box" style="background: rgba(0, 255, 136, 0.15); color: #00ff88;">
+              <i class="fas fa-database"></i>
+            </div>
+            <div class="metric-details">
+              <h3 id="metric-db-engine" style="font-size: 1.15rem; color: #00ff88;">SQLite 3</h3>
+              <p id="metric-db-status">Database Online</p>
             </div>
           </div>
         </div>
@@ -910,6 +926,20 @@
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+            <!-- SQLite Database Binary Backup -->
+            <div style="background: rgba(0, 255, 136, 0.04); border: 1px solid rgba(0, 255, 136, 0.25); border-radius: var(--radius-sm); padding: 20px;">
+              <h4 style="color: #00ff88; margin-bottom: 6px;"><i class="fas fa-database"></i> SQLite Database Binary Backup (`agent47.db`)</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Download a complete binary backup of your live SQLite database with all profile data, messages, and configurations.</p>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="/api/db/download" download="agent47.db" class="btn-action btn-primary" style="background: linear-gradient(135deg, #059669, #10b981); border-color: #10b981; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-download"></i> Download `agent47.db`
+                </a>
+                <button type="button" class="btn-action btn-header-ghost" onclick="testDatabaseHealth()">
+                  <i class="fas fa-stethoscope"></i> Diagnostic Test
+                </button>
+              </div>
+            </div>
+
             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 20px;">
               <h4 style="color: #fff; margin-bottom: 6px;">1-Click Download `profile-data.js`</h4>
               <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Download a complete ready-to-use JavaScript file containing your exact configuration.</p>

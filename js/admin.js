@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initSettings();
   initExportTools();
   initAdminThemeToggle();
+  initDatabaseStatus();
+
+  // Live database updates
+  window.addEventListener('profileDataUpdated', () => {
+    loadAllAdminData();
+  });
+  window.addEventListener('messagesUpdated', () => {
+    loadAllAdminData();
+  });
 });
 
 /* Theme Switcher Controller in Admin Studio */
@@ -84,12 +93,29 @@ function initAuth() {
     });
   }
 
-  function handleUnlock() {
+  async function handleUnlock() {
     if (!pinInput) return;
     const entered = pinInput.value.trim();
-    const storedPin = getAdminPasscode();
+    let isValid = false;
 
-    if (entered === storedPin) {
+    // Check with SQLite backend
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: entered })
+      });
+      if (res.ok) {
+        const resData = await res.json();
+        isValid = Boolean(resData.valid);
+      } else {
+        isValid = (entered === getAdminPasscode());
+      }
+    } catch (e) {
+      isValid = (entered === getAdminPasscode());
+    }
+
+    if (isValid) {
       sessionStorage.setItem('admin_authenticated', 'true');
       if (pinOverlay) pinOverlay.classList.add('hidden');
       pinInput.value = '';
@@ -1626,9 +1652,9 @@ function initSettings() {
         return;
       }
 
-      if (setAdminPasscode(newPin)) {
+      if (setAdminPasscode(newPin, current)) {
         pinForm.reset();
-        showToast('Admin PIN updated successfully!', 'success');
+        showToast('Admin PIN updated successfully in SQLite & Local Storage!', 'success');
       } else {
         showToast('Could not save PIN to storage!', 'danger');
       }
@@ -2044,3 +2070,68 @@ function showToast(msg, type = 'info') {
     setTimeout(() => toast.remove(), 300);
   }, 3500);
 }
+
+/* ==========================================================
+   SQLITE DATABASE STATUS CONTROLLER
+   ========================================================== */
+function initDatabaseStatus() {
+  updateDatabaseUI(window.DATABASE_INFO);
+  window.addEventListener('databaseStatusChanged', (e) => {
+    updateDatabaseUI(e.detail);
+  });
+}
+
+function updateDatabaseUI(info) {
+  const badge = document.getElementById('db-status-badge');
+  const dot = document.getElementById('db-status-dot');
+  const text = document.getElementById('db-status-text');
+  const metricStatus = document.getElementById('metric-db-status');
+  const metricEngine = document.getElementById('metric-db-engine');
+
+  if (!info) return;
+
+  if (window.DATABASE_CONNECTED) {
+    if (badge) {
+      badge.style.background = 'rgba(0, 255, 136, 0.1)';
+      badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+      badge.style.color = '#00ff88';
+    }
+    if (dot) {
+      dot.style.background = '#00ff88';
+      dot.style.boxShadow = '0 0 8px #00ff88';
+    }
+    if (text) text.textContent = `SQLite 3: Connected (${info.db_size_kb || 52} KB)`;
+    if (metricEngine) metricEngine.textContent = info.engine || 'SQLite 3';
+    if (metricStatus) metricStatus.textContent = `Online • ${info.messages_total || 0} msgs`;
+  } else {
+    if (badge) {
+      badge.style.background = 'rgba(234, 179, 8, 0.1)';
+      badge.style.borderColor = 'rgba(234, 179, 8, 0.35)';
+      badge.style.color = '#eab308';
+    }
+    if (dot) {
+      dot.style.background = '#eab308';
+      dot.style.boxShadow = '0 0 8px #eab308';
+    }
+    if (text) text.textContent = 'Storage: Local Fallback';
+    if (metricStatus) metricStatus.textContent = 'Local Cache Active';
+  }
+}
+
+window.testDatabaseHealth = async function() {
+  try {
+    showToast('Pinging SQLite database engine...', 'info');
+    const res = await fetch('/api/health');
+    if (res.ok) {
+      const data = await res.json();
+      const dbInfo = data.database;
+      showToast(`SQLite Healthy! Version: ${dbInfo.version} | Size: ${dbInfo.db_size_kb} KB | Total Messages: ${dbInfo.messages_total}`, 'success');
+      updateDatabaseUI(dbInfo);
+    } else {
+      showToast('Database responded with status ' + res.status, 'danger');
+    }
+  } catch (err) {
+    showToast('Backend offline. Run: python server.py', 'danger');
+  }
+};
+

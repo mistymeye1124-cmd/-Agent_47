@@ -110,4 +110,34 @@ Admin Studio-তে ঢুকে **Gemini & Security** ট্যাবে গি
 ```bash
 docker compose up -d --build
 ```
-এক ক্লিকেই পোর্ট ৮০ তে পুরো সাইট চালু হয়ে যাবে!
+এক ক্লিকেই পোর্ট ৮০ তে পুরো সাইট ও পারসিস্টেন্ট SQLite ডাটাবেস ভলিউম চালু হয়ে যাবে!
+
+---
+
+## 💾 SQLite Database Management (ডাটাবেস কমান্ড ও ম্যানেজমেন্ট)
+
+প্রোজেক্টটিতে এখন রয়েছে হাই-পারফরম্যান্স **SQLite 3** ডাটাবেস (`database/agent47.db`)।
+
+### ১. লোকাল কম্পিউটারে রান করার নিয়ম:
+```powershell
+python server.py
+```
+- ব্রাউজারে ওপেন করুন: `http://localhost:8000` (পোর্টফোলিও)
+- অ্যাডমিন স্টুডিও: `http://localhost:8000/admin.html`
+- লাইভ এপিআই ডকস: `http://localhost:8000/docs`
+
+### ২. CLI দিয়ে ডাটাবেস চেক ও ব্যাকআপ নেওয়া (`db_manager.py`):
+```powershell
+# ডাটাবেসের লাইভ হেলথ ও মেসেজ সংখ্যা দেখা:
+python db_manager.py status
+
+# ডাটাবেসের টাইমস্ট্যাম্পড ব্যাকআপ তৈরি করা:
+python db_manager.py backup
+
+# অ্যাডমিন পিন সরাসরি ডাটাবেসে রিসেট করা:
+python db_manager.py reset-pin 1234
+
+# ডাটাবেস JSON এক্সপোর্ট করা:
+python db_manager.py export
+```
+

@@ -1,9 +1,15 @@
 version: '3.8'
 
 services:
-  agent47-web:
+  agent47-app:
     build: .
-    container_name: agent47_web
+    container_name: agent47_app
     restart: always
     ports:
-      - "80:80"
+      - "${HOST_PORT:-8080}:8000"
+    volumes:
+      - ./database:/app/database
+    env_file:
+      - .env
+    environment:
+      - PORT=8000

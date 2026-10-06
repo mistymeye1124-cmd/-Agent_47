@@ -1,14 +1,22 @@
-FROM nginx:alpine
+FROM python:3.12-slim
 
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-# Copy project files into web root
-COPY . /usr/share/nginx/html
+# Prevent Python from writing pyc files and buffering stdout
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80
+# Copy application files
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+# Ensure database directory exists
+RUN mkdir -p /app/database
+
+ENV PORT=8000
+EXPOSE 8000
+
+CMD ["python", "server.py"]
